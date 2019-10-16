@@ -17,6 +17,24 @@ cd backend
 npm install
 ```
 
+## Steps to dev App
+
+1. run dev-mode frontend
+
+```bash
+cd frontend
+npm run start
+```
+
+2. run backend server
+
+```bash
+cd backend
+npm run start
+```
+
+3. Client-side will host in <a href="localhost:8080" target="_blank">localhost:8080/</a>
+
 ## Steps to build App
 
 1. build static frontend
@@ -26,13 +44,11 @@ cd frontend
 npm run build
 ```
 
-2. copy folder ./dist from frontend then paste it in backend
-
-3. build backend server
+2. run backend server
 
 ```bash
 cd backend
-npm run build
+npm run start
 ```
 
-4. App will host in <a href="localhost:3000" target="_blank">localhost:3000/</a>
+3. App will host in <a href="localhost:3000" target="_blank">localhost:3000/</a>
