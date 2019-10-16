@@ -40,7 +40,8 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('createUser')
   async createUser(client: Socket, name: string) {
-    // console.log('in createUser');
+    console.log('Event: createUser');
+    console.log(`Name: ${name}`);
     const user: User = {
       id: client.id,
       name,
@@ -48,11 +49,15 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
       status: Status.ONLINE,
       score: 0,
     };
-    this.boardsService.initBoard(client.id);
-    this.server.emit(
-      'refreshOnlineUsers',
-      await this.usersService.addUser(user)
-    );
+    try {
+      const users = await this.usersService.addUser(user);
+      this.server.emit('refreshOnlineUsers', users);
+      await this.boardsService.initBoard(client.id);
+      return users[client.id];
+      // return client.id;
+    } catch (err) {
+      return { message: err.message };
+    }
   }
 
   @SubscribeMessage('updateUser')

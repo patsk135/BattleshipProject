@@ -1,3 +1,3 @@
-import { User } from 'src/interfaces/users.interface';
+import { Users } from 'src/interfaces/users.interface';
 
-export const USERS: User[] = [];
+export const USERS: Users = {};

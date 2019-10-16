@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Modal = ({ message, close }) => {
+export const ModalHim = ({ message, close }) => {
   const array = ["asda", "asd", "asd"];
   return (
     <div>

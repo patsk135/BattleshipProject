@@ -1,43 +1,81 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
-import { Modal } from "./components/Modal";
 import "./App.css";
+import React, { useState } from "react";
+import { socket } from "./socket";
+// import logo from "./logo.svg";
+import { LoginModal } from "./components/LoginModal";
+import { OnlinePlayersTab } from "./components/OnlinePlayersTab";
+import { InviteWindow } from "./components/InviteWindow";
+import { MyStatusBox } from "./components/MyStatusBox";
+// import { ModalHim } from "./components/ModalHim";
 
 function App() {
-  const [show, setShow] = useState(false);
-  const [value, setValue] = useState("");
-  const handleInput = event => {
-    setValue(event.target.value);
+  const [users, setUsers] = useState([]);
+  socket.on("refreshOnlineUsers", res => {
+    setUsers(res);
+    console.log(users);
+  });
+
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    oppId: "",
+    status: "",
+    score: 0
+  });
+  socket.on("pingToClient", msg => {
+    console.log(msg);
+  });
+
+  const [userId, setUserId] = useState("");
+
+  setInterval(() => {
+    // console.log("in ping");
+    socket.emit("pingToServer", "Ping!");
+  }, 15000);
+  const [showLogin, setShowLogin] = useState(true);
+
+  const submit = thisUser => {
+    // const { id, name, oppId, status, score } = thisUser;
+    // console.log(thisUser);
+    setUser(thisUser);
+    // setUser({
+    //   id,
+    //   name,
+    //   oppId,
+    //   status,
+    //   score
+    // });
+    // console.log(user);
+    // setUserId(thisUserId);
+    setShowLogin(false);
   };
-  const open = () => {
-    setShow(true);
+
+  const [showInviteWindow, setShowInviteWindow] = useState(false);
+  const closeInviteWindow = () => {
+    setShowInviteWindow(false);
   };
-  const close = () => {
-    setShow(false);
-  };
+  socket.on("getInvitation", oppId => {
+    console.log("Get Invitation");
+    setShowInviteWindow(true);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <label>
-          Name:
-          <input type="text" value={value} onChange={handleInput} />
-        </label>
-        <button onClick={open}>show</button>
-        {show && <Modal message={value} close={close} />}
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">
+        <header className="App-header">
+          <div>{<MyStatusBox user={user} />}</div>
+          {showLogin && <LoginModal submit={submit} />}
+          {<OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>}
+          {showInviteWindow && (
+            <InviteWindow
+              close={closeInviteWindow}
+              user={user}
+              setUser={setUser}
+            />
+          )}
+        </header>
+      </div>
+    </>
   );
 }
 

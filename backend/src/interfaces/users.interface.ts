@@ -6,8 +6,12 @@ export interface User {
   score: number;
 }
 
+export interface Users {
+  [key: string]: User;
+}
+
 export enum Status {
-  ONLINE,
-  READY,
-  INGAME,
+  ONLINE = 'ONLINE',
+  READY = 'READY',
+  INGAME = 'INGAME',
 }

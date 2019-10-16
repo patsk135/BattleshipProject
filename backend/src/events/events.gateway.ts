@@ -32,9 +32,9 @@ export class EventsGateway {
     // return data;
   }
 
-  @SubscribeMessage('invitePlayer')
+  @SubscribeMessage('sendInvitation')
   invitePlayer(client: Socket, playerId: string) {
-    client.broadcast.to(playerId).emit('requestInvite');
+    client.broadcast.to(playerId).emit('getInvitation');
   }
 
   @SubscribeMessage('createBoard')

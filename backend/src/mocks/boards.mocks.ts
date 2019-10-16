@@ -1,3 +1,3 @@
-import { Board } from '../interfaces/boards.interface';
+import { Boards } from '../interfaces/boards.interface';
 
-export const BOARDS: Board[] = [];
+export const BOARDS: Boards = {};

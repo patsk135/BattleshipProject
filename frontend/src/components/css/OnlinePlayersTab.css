@@ -1,0 +1,53 @@
+.nav {
+  background-color: blanchedalmond;
+  padding: 20px;
+  list-style-type: none;
+  text-align: center;
+}
+
+.nav li {
+  color: black;
+  display: inline-block;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.container ul {
+  background-color: #cc8888;
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+}
+
+.container ul li {
+  color: black;
+  display: inline-block;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.inviteButton {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

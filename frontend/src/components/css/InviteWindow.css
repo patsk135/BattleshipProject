@@ -1,0 +1,10 @@
+.inviteWindow {
+  background-color: burlywood;
+}
+
+.buttons li {
+  display: inline-block;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
