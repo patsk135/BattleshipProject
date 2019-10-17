@@ -5,7 +5,7 @@ import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
 
 @Module({
-  imports: [UsersModule, EventsModule],
+  imports: [EventsModule],
   controllers: [AppController],
   providers: [AppService],
 })

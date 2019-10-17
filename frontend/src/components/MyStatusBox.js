@@ -6,6 +6,7 @@ export const MyStatusBox = ({ user }) => {
     <div className="myStatusBox">
       <li>UserName: {user.name}</li>
       <li>ID: {user.id}</li>
+      <li>Status: {user.status}</li>
     </div>
   );
 };

@@ -3,8 +3,10 @@ import "./css/OnlinePlayersTab.css";
 import { socket } from "../socket";
 
 export const OnlinePlayersTab = ({ user, users }) => {
-  const onClick = () => {
-    socket.emit();
+  const onClick = oppId => {
+    console.log("Before sendInvitation");
+    console.log(oppId);
+    socket.emit("sendInvitation", oppId);
   };
 
   return (
@@ -15,22 +17,25 @@ export const OnlinePlayersTab = ({ user, users }) => {
         <li>Score</li>
       </ul>
       <div className="container">
-        {Object.values(users).map(eachUser => (
-          <ul key={eachUser.id}>
-            <li>{eachUser.name}</li>
-            <li>{eachUser.status}</li>
-            <li>{eachUser.score}</li>
-            <li>
-              <button
-                className={`inviteButton ${eachUser.status !== "ONLINE" &&
-                  "disabled"}`}
-                onClick={onClick}
-              >
-                invite
-              </button>
-            </li>
-          </ul>
-        ))}
+        {Object.values(users)
+          .filter(one => one.id !== user.id)
+          .map(eachUser => (
+            <ul key={eachUser.id}>
+              <li>{eachUser.name}</li>
+              <li>{eachUser.status}</li>
+              <li>{eachUser.score}</li>
+              <li>
+                <button
+                  // className="inviteButton"
+                  className={`inviteButton ${eachUser.status !== "ONLINE" &&
+                    "disabled"}`}
+                  onClick={e => onClick(eachUser.id)}
+                >
+                  invite
+                </button>
+              </li>
+            </ul>
+          ))}
       </div>
     </div>
   );
