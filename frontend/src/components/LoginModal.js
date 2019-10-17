@@ -11,10 +11,9 @@ export const LoginModal = ({ close }) => {
     socket.emit("createUser", name, err => {
       if (err) {
         console.log(err);
-      } else {
-        close();
       }
     });
+    close();
   };
   return (
     <div className="loginModal">
@@ -27,7 +26,6 @@ export const LoginModal = ({ close }) => {
           className="input"
         />
       </label>
-      {/* <div>Name: {name}</div> */}
       <div>
         <button onClick={onClick} className="primaryButton submit">
           Submit
