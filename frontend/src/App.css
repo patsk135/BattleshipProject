@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito&display=swap");
+
 .App {
   text-align: center;
 }
@@ -7,7 +9,12 @@
 }
 
 .App-header {
-  background-color: #504b4b;
+  background: radial-gradient(
+      97.39% 244.62% at 1.46% 2.61%,
+      #1cb5e0 0%,
+      rgba(28, 181, 224, 0) 100%
+    ),
+    #000851;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -19,4 +26,12 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.border {
+  width: 562px;
+  height: 288px;
+  background: #ffffff;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
 }

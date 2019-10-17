@@ -4,6 +4,9 @@
 
 .buttons li {
   display: inline-block;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 300;
   font-size: 20px;
   padding-left: 20px;
   padding-right: 20px;

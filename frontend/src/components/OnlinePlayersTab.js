@@ -12,9 +12,9 @@ export const OnlinePlayersTab = ({ user, users }) => {
   return (
     <div>
       <ul className="nav">
-        <li>Online Players</li>
-        <li>Status</li>
-        <li>Score</li>
+        <li>ONLINE PLAYERS</li>
+        <li>STATUS</li>
+        <li>SCORE</li>
       </ul>
       <div className="container">
         {Object.values(users)

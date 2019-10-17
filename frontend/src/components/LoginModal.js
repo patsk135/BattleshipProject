@@ -18,13 +18,20 @@ export const LoginModal = ({ close }) => {
   };
   return (
     <div className="loginModal">
+      <p className="enterYn">Enter Your Name </p>
       <label>
-        Input Name:
-        <input type="text" value={name} onChange={handleInput} />
+        <input
+          type="text"
+          value={name}
+          onChange={handleInput}
+          className="input"
+        />
       </label>
-      <div>Name: {name}</div>
+      {/* <div>Name: {name}</div> */}
       <div>
-        <button onClick={onClick}>submit</button>
+        <button onClick={onClick} className="primaryButton submit">
+          Submit
+        </button>
       </div>
     </div>
   );
