@@ -4,9 +4,11 @@ import "./css/InviteWindow.css";
 
 export const InviteWindow = ({ close, user }) => {
   const accept = () => {
-    socket.emit("acceptInvitation", user.oppId, data => {
-      console.log(data);
-    });
+    if (user.status === "ONLINE") {
+      socket.emit("acceptInvitation", user.oppId, data => {
+        console.log(data);
+      });
+    }
     close();
   };
   const reject = () => {
