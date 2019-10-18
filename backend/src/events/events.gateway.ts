@@ -32,11 +32,11 @@ export class EventsGateway {
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
     const users = await this.usersService.deleteUser(client.id);
-    const data = {
+    const payload = {
       event: 'HandleDisconnect',
       users,
     };
-    this.server.emit('refreshOnlineUsers', data);
+    this.server.emit('refreshOnlineUsers', payload);
   }
 
   @SubscribeMessage('createUser')
@@ -51,16 +51,16 @@ export class EventsGateway {
     };
     try {
       const users = await this.usersService.addUser(user);
-      const data1 = {
+      const payload1 = {
         event: 'CreateUser',
         users,
       };
-      this.server.emit('refreshOnlineUsers', data1);
-      const data2 = {
+      this.server.emit('refreshOnlineUsers', payload1);
+      const payload2 = {
         event: 'CreateUser',
         user: users[client.id],
       };
-      client.emit('returnUpdatedUser', data2);
+      client.emit('returnUpdatedUser', payload2);
       await this.boardsService.initBoard(client.id);
     } catch (err) {
       return { message: err.message };
@@ -71,21 +71,21 @@ export class EventsGateway {
   async updateUser(client: Socket, updatedUser: User) {
     this.logger.log(`Event: UpdateUser => UpdatedUser: ${updatedUser}`);
     const users = await this.usersService.updateUser(updatedUser);
-    const data = {
+    const payload = {
       event: 'UpdateUser',
       user: users[updatedUser.id],
     };
-    client.emit('returnUpdatedUser', data);
+    client.emit('returnUpdatedUser', payload);
   }
 
   @SubscribeMessage('deleteUser')
   async deleteUser(client: Socket, userId: string) {
     this.logger.log(`Event: DeleteUser`);
-    const data = {
+    const payload = {
       event: 'DeleteUser',
       users: await this.usersService.deleteUser(userId),
     };
-    this.server.emit('refreshOnlineUsers', data);
+    this.server.emit('refreshOnlineUsers', payload);
   }
 
   // count: number = 0;
@@ -94,12 +94,12 @@ export class EventsGateway {
   ping(client: Socket, ping: any) {
     // this.logger.log(`Event: PingToServer => count: ${++this.count}`);
     const msg = `${client.id}: Ping! ${Date().toString()}`;
-    const data = {
+    const payload = {
       event: 'PingToServer',
       msg,
       // count: this.count,
     };
-    client.emit('pingToClient', data);
+    client.emit('pingToClient', payload);
   }
 
   @SubscribeMessage('fetchUser')
@@ -129,7 +129,7 @@ export class EventsGateway {
   @SubscribeMessage('sendInvitation')
   async invitePlayer(client: Socket, oppId: string) {
     this.logger.log(`Event: SendInvitation`);
-    const { ...prevUser } = this.usersService.users[client.id];
+    const prevUser = this.usersService.users[client.id];
     const updatedUser = {
       ...prevUser,
       oppId,
@@ -154,7 +154,7 @@ export class EventsGateway {
     // console.log(this.usersService.users[oppId]);
     if (this.usersService.users[oppId].status === Status.ONLINE) {
       // console.log('In IF');
-      const { ...prevOpp } = this.usersService.users[oppId];
+      const prevOpp = this.usersService.users[oppId];
       const updatedOpp = {
         ...prevOpp,
         status: Status.INGAME,
@@ -164,7 +164,7 @@ export class EventsGateway {
         event: 'AcceptInvitation',
         user: (await this.usersService.updateUser(updatedOpp))[oppId],
       });
-      const { ...prevUser } = this.usersService.users[client.id];
+      const prevUser = this.usersService.users[client.id];
       const updatedUser = {
         ...prevUser,
         status: Status.INGAME,
@@ -175,11 +175,11 @@ export class EventsGateway {
         event: 'AcceptInvitation',
         user: users[client.id],
       });
-      const data = {
+      const payload = {
         event: 'AcceptInvitation',
         users,
       };
-      this.server.emit('refreshOnlineUsers', data);
+      this.server.emit('refreshOnlineUsers', payload);
       // Emit event to both
       client.broadcast.to(oppId).emit('preparationStage', {
         event: 'AcceptInvitation',

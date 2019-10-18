@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import "./css/OnlinePlayersTab.css";
-import { socket } from "../socket";
+import React from 'react';
+import './css/OnlinePlayersTab.css';
+import { socket } from '../socket';
 
 export const OnlinePlayersTab = ({ user, users }) => {
   const onClick = oppId => {
-    console.log("Before sendInvitation");
+    console.log('Before sendInvitation');
     console.log(oppId);
-    socket.emit("sendInvitation", oppId);
+    socket.emit('sendInvitation', oppId);
   };
 
   return (
     <div>
-      <ul className="nav">
+      <ul className='nav'>
         <li>ONLINE PLAYERS</li>
         <li>STATUS</li>
         <li>SCORE</li>
       </ul>
-      <div className="container">
+      <div className='container'>
         {Object.values(users)
           .filter(one => one.id !== user.id)
           .map(eachUser => (
@@ -27,8 +27,8 @@ export const OnlinePlayersTab = ({ user, users }) => {
               <li>
                 <button
                   // className="inviteButton"
-                  className={`inviteButton ${eachUser.status !== "ONLINE" &&
-                    "disabled"}`}
+                  className={`inviteButton ${eachUser.status !== 'ONLINE' &&
+                    'disabled'}`}
                   onClick={e => onClick(eachUser.id)}
                 >
                   invite
