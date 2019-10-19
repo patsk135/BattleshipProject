@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BOARDS } from '../mocks/boards.mocks';
-import { Coordinate } from 'src/interfaces/gateway/events.gateway.interface';
+import { BOARDS } from '../../mocks/boards.mocks';
+import { Coordinate } from 'src/interfaces/events.gateway.interface';
 import { Boards, Board } from 'src/interfaces/boards.interface';
 
 @Injectable()
@@ -11,15 +11,21 @@ export class BoardsService {
     if (userId in this.boards) {
       throw new Error('User already has a board!');
     }
-    const dArray: number[][][] = new Array(2)
+    const shipPlacement: number[][] = new Array(8)
       .fill(false)
-      .map(() => new Array(8).fill(false).map(() => new Array(8).fill(0)));
-    const newBoard = {
+      .map(() => new Array(8).fill(0));
+    const attackStatus: number[][] = new Array(8)
+      .fill(false)
+      .map(() => new Array(8).fill(0));
+    const board: Board = {
       owner: userId,
-      status: dArray,
+      status: {
+        shipPlacement,
+        attackStatus,
+      },
     };
-    this.boards[userId] = newBoard;
-    return newBoard;
+    this.boards[userId] = board;
+    return board;
   }
 
   async findBoard(userId: string): Promise<Board> {
@@ -32,7 +38,7 @@ export class BoardsService {
 
   async placeShips(shipPlacement: number[][], userId: string): Promise<Board> {
     if (userId in this.boards) {
-      this.boards[userId][status][0] = shipPlacement;
+      this.boards[userId].status.shipPlacement = shipPlacement;
     } else {
       throw new Error(`User doesn't have a board!`);
     }
@@ -42,11 +48,11 @@ export class BoardsService {
   async isAttacked(coor: Coordinate, oppId: string): Promise<Board> {
     if (oppId in this.boards) {
       const board = this.boards[oppId];
-      const hasShip = board.status[0][coor.x][coor.y];
+      const hasShip = board.status.shipPlacement[coor.x][coor.y];
       if (hasShip === 0) {
-        board.status[1][coor.x][coor.y] = -1;
+        board.status.attackStatus[coor.x][coor.y] = -1;
       } else if (hasShip === 1) {
-        board.status[1][coor.x][coor.y] = 1;
+        board.status.attackStatus[coor.x][coor.y] = 1;
       } else {
         throw new Error('Bug: hasShip !== 0 && !== 1');
       }

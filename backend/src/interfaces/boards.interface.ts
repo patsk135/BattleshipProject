@@ -4,5 +4,10 @@ export interface Boards {
 
 export interface Board {
   owner: string;
-  status: number[][][];
+  status: BoardStatus;
+}
+
+interface BoardStatus {
+  shipPlacement: number[][];
+  attackStatus: number[][];
 }

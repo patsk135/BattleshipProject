@@ -4,13 +4,13 @@ import {
   SubscribeMessage,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UsersService } from '../users/users.service';
-import { BoardsService } from '../boards/boards.service';
+import { UsersService } from './services/users.service';
+import { BoardsService } from './services/boards.service';
 import { Logger } from '@nestjs/common';
 import {
   MsgToServer,
   Coordinate,
-} from 'src/interfaces/gateway/events.gateway.interface';
+} from 'src/interfaces/events.gateway.interface';
 import { Status, User } from 'src/interfaces/users.interface';
 
 @WebSocketGateway()
@@ -33,7 +33,7 @@ export class EventsGateway {
     this.logger.log(`Client disconnected: ${client.id}`);
     const users = await this.usersService.deleteUser(client.id);
     const payload = {
-      event: 'HandleDisconnect',
+      event: this.handleDisconnect.name,
       users,
     };
     this.server.emit('refreshOnlineUsers', payload);
@@ -52,12 +52,12 @@ export class EventsGateway {
     try {
       const users = await this.usersService.addUser(user);
       const payload1 = {
-        event: 'CreateUser',
+        event: this.createUser.name,
         users,
       };
       this.server.emit('refreshOnlineUsers', payload1);
       const payload2 = {
-        event: 'CreateUser',
+        event: this.createUser.name,
         user: users[client.id],
       };
       client.emit('returnUpdatedUser', payload2);
@@ -72,7 +72,7 @@ export class EventsGateway {
     this.logger.log(`Event: UpdateUser => UpdatedUser: ${updatedUser}`);
     const users = await this.usersService.updateUser(updatedUser);
     const payload = {
-      event: 'UpdateUser',
+      event: this.updateUser.name,
       user: users[updatedUser.id],
     };
     client.emit('returnUpdatedUser', payload);
@@ -82,7 +82,7 @@ export class EventsGateway {
   async deleteUser(client: Socket, userId: string) {
     this.logger.log(`Event: DeleteUser`);
     const payload = {
-      event: 'DeleteUser',
+      event: this.deleteUser.name,
       users: await this.usersService.deleteUser(userId),
     };
     this.server.emit('refreshOnlineUsers', payload);
@@ -95,7 +95,7 @@ export class EventsGateway {
     // this.logger.log(`Event: PingToServer => count: ${++this.count}`);
     const msg = `${client.id}: Ping! ${Date().toString()}`;
     const payload = {
-      event: 'PingToServer',
+      event: this.ping.name,
       msg,
       // count: this.count,
     };
@@ -194,9 +194,9 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('createBoard')
-  async createBoard(client: Socket, placement: number[][], oppId: string) {
+  async createBoard(client: Socket, shipPlacement: number[][], oppId: string) {
     this.logger.log(`Event: CreateBoard`);
-    const board = await this.boardsService.placeShips(placement, client.id);
+    const board = await this.boardsService.placeShips(shipPlacement, client.id);
     client.broadcast.to(oppId).emit('oppReady', {
       event: 'CreateBoard',
     });

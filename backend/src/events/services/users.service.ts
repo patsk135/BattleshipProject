@@ -1,6 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
-import { USERS } from '../mocks/users.mocks';
-import { User, Users } from '../interfaces/users.interface';
+import { USERS } from '../../mocks/users.mocks';
+import { User, Users } from '../../interfaces/users.interface';
 
 @Injectable()
 export class UsersService {
