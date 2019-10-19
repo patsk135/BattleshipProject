@@ -22,6 +22,9 @@ function App() {
     const [showInviteWindow, setShowInviteWindow] = useState(false);
     const closeInviteWindow = () => setShowInviteWindow(false);
 
+    const [showCreateBoard, setShowCreateBoard] = useState(false);
+    const closeCreateBoard = () => setShowCreateBoard(false);
+
     useEffect(() => {
         // Ping ///////////////////////////////////////////////
         socket.on('pingToClient', payload => {
@@ -60,6 +63,11 @@ function App() {
                 };
             });
         });
+
+        socket.on('preparationStage', payload => {
+            console.log(`PreparationStage`);
+            setShowCreateBoard(true);
+        });
     }, []);
 
     return (
@@ -76,6 +84,7 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 <div>{<MyStatusBox user={user} />}</div>
+                                {showCreateBoard && <Board></Board>}
                                 {showLogin && <LoginModal close={closeShowLogin} />}
                                 {<OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>}
                                 {showInviteWindow && (
