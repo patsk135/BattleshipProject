@@ -26,7 +26,6 @@ export const OnlinePlayersTab = ({ user, users }) => {
                             <li>{eachUser.mmr}</li>
                             <li>
                                 <button
-                                    // className="inviteButton"
                                     className={`inviteButton ${eachUser.status !== 'ONLINE' &&
                                         'disabled'}`}
                                     onClick={e => onClick(eachUser.id)}

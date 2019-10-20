@@ -1,0 +1,7 @@
+.boards {
+    display: inline-flex;
+}
+
+.avoid-clicks {
+    pointer-events: none;
+}

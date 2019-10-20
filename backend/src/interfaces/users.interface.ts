@@ -6,6 +6,7 @@ export interface User {
   mmr: number;
   ready: boolean;
   score: number;
+  yourTurn: boolean;
 }
 
 export interface Users {

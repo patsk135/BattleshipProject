@@ -10,11 +10,7 @@ export const CreateBoard = ({ user }) => {
     const ready = () => {
         // console.log('READY!');
         // console.log(user.oppId);
-        const payload = {
-            shipPlacement: squares,
-            oppId: user.oppId,
-        };
-        socket.emit('createBoard', payload, () => {});
+        socket.emit('createBoard', squares, () => {});
     };
 
     const handleOnClick = index => {
@@ -156,7 +152,7 @@ export const CreateBoard = ({ user }) => {
                 {renderSquare()}
             </div>
             {numberOfShips !== 4 && <button onClick={placeAShip}>Place this Ship.</button>}
-            {numberOfShips === 1 && <button onClick={ready}>Ready</button>}
+            {numberOfShips >= 1 && <button onClick={ready}>Ready</button>}
         </>
     );
 };

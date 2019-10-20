@@ -41,6 +41,7 @@ export class BoardsService {
   async placeShips(shipPlacement: number[], userId: string): Promise<Board> {
     if (userId in this.boards) {
       this.boards[userId].status.shipPlacement = shipPlacement;
+      this.boards[userId].status.attackStatus = new Array(64).fill(0);
     } else {
       throw new Error(`User doesn't have a board!`);
     }
@@ -50,14 +51,15 @@ export class BoardsService {
   async isAttacked(index: number, oppId: string): Promise<Board> {
     if (oppId in this.boards) {
       const board = this.boards[oppId];
-      const hasShip = board.status.shipPlacement[index];
-      if (hasShip === 0) {
-        board.status.attackStatus[index] = -1;
-      } else if (hasShip === 1) {
-        board.status.attackStatus[index] = 1;
-      } else {
-        throw new Error('Bug: hasShip !== 0 && !== 1');
-      }
+      board.status.attackStatus[index] = 1;
+      // const hasShip = board.status.shipPlacement[index];
+      // if (hasShip === 0) {
+      //   board.status.attackStatus[index] = -1;
+      // } else if (hasShip === 1) {
+      //   board.status.attackStatus[index] = 1;
+      // } else {
+      //   throw new Error('Bug: hasShip !== 0 && !== 1');
+      // }
       return board;
     } else {
       throw new Error(`User doesn't have board!`);

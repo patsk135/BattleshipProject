@@ -12,12 +12,14 @@ import { AdminPage } from './components/AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameBoard } from './components/game/inGameBoard/InGameBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
+import { RoundTransition } from './components/game/createBoard/RoundTransition';
+import { EndGameModal } from './components/EndGameModal';
 
 function App() {
     const [user, setUser] = useState({});
     const [users, setUsers] = useState({});
     const [messages, setMessages] = useState([]);
-    const [turn, setTurn] = useState(0);
+    const [tmp_msg, setTmp_msg] = useState('');
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
@@ -26,6 +28,7 @@ function App() {
     const closeInviteWindow = () => setShowInviteWindow(false);
 
     const [showCreateBoard, setShowCreateBoard] = useState(false);
+    const openCreateBoard = () => setShowCreateBoard(true);
 
     const [showInGameWindow, setShowInGameWindow] = useState(false);
     const openInGameWindow = () => {
@@ -33,6 +36,12 @@ function App() {
         setShowInGameWindow(true);
     };
     const closeInGameWindow = () => setShowInGameWindow(false);
+
+    const [showRoundTransition, setShowRoundTransition] = useState(false);
+    const closeTransition = () => setShowRoundTransition(false);
+
+    const [showEndGameModal, setShowEndGameModal] = useState(false);
+    const closeShowEndGameModal = () => setShowEndGameModal(false);
 
     useEffect(() => {
         // Ping ///////////////////////////////////////////////
@@ -76,13 +85,28 @@ function App() {
         socket.on('preparationStage', payload => {
             console.log(`PreparationStage`);
             setShowCreateBoard(true);
+            setShowInviteWindow(false);
         });
 
-        socket.on('startGame', payload => {
+        socket.on('startGame', () => {
             console.log('StartGame');
             openInGameWindow();
-            socket.emit('fetchBoard', user.oppId);
-            setTurn(payload.coin);
+            socket.emit('fetchBoard');
+            socket.emit('fetchUser');
+        });
+
+        socket.on('nextRound', msg => {
+            socket.emit('fetchUser');
+            closeInGameWindow();
+            setShowRoundTransition(true);
+            setTmp_msg(msg);
+        });
+
+        socket.on('finishGame', msg => {
+            socket.emit('fetchUser');
+            closeInGameWindow();
+            setShowEndGameModal(true);
+            setTmp_msg(msg);
         });
     }, []);
 
@@ -100,16 +124,33 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 <div>{<MyStatusBox user={user} />}</div>
+                                {showEndGameModal && (
+                                    <EndGameModal
+                                        user={user}
+                                        msg={tmp_msg}
+                                        close={closeShowEndGameModal}
+                                    ></EndGameModal>
+                                )}
+                                {showRoundTransition && (
+                                    <RoundTransition
+                                        user={user}
+                                        msg={tmp_msg}
+                                        openCreateBoard={openCreateBoard}
+                                        closeTransition={closeTransition}
+                                    ></RoundTransition>
+                                )}
+                                {}
                                 {showCreateBoard && <CreateBoard user={user}></CreateBoard>}
                                 {showInGameWindow && (
                                     <InGameWindow
-                                        turn={turn}
-                                        setTurn={setTurn}
+                                        user={user}
                                         close={closeInGameWindow}
                                     ></InGameWindow>
                                 )}
                                 {showLogin && <LoginModal close={closeShowLogin} />}
-                                {<OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>}
+                                {user.status === 'ONLINE' && (
+                                    <OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>
+                                )}
                                 {showInviteWindow && (
                                     <InviteWindow close={closeInviteWindow} user={user} />
                                 )}
