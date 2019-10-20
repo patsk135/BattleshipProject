@@ -11,12 +11,14 @@ export class BoardsService {
     if (userId in this.boards) {
       throw new Error('User already has a board!');
     }
-    const shipPlacement: number[][] = new Array(8)
-      .fill(false)
-      .map(() => new Array(8).fill(0));
-    const attackStatus: number[][] = new Array(8)
-      .fill(false)
-      .map(() => new Array(8).fill(0));
+    // const shipPlacement: number[][] = new Array(8)
+    //   .fill(false)
+    //   .map(() => new Array(8).fill(0));
+    // const attackStatus: number[][] = new Array(8)
+    //   .fill(false)
+    //   .map(() => new Array(8).fill(0));
+    const shipPlacement: number[] = new Array(64).fill(0);
+    const attackStatus: number[] = new Array(64).fill(0);
     const board: Board = {
       owner: userId,
       status: {
@@ -36,7 +38,7 @@ export class BoardsService {
     }
   }
 
-  async placeShips(shipPlacement: number[][], userId: string): Promise<Board> {
+  async placeShips(shipPlacement: number[], userId: string): Promise<Board> {
     if (userId in this.boards) {
       this.boards[userId].status.shipPlacement = shipPlacement;
     } else {
@@ -45,14 +47,14 @@ export class BoardsService {
     return this.boards[userId];
   }
 
-  async isAttacked(coor: Coordinate, oppId: string): Promise<Board> {
+  async isAttacked(index: number, oppId: string): Promise<Board> {
     if (oppId in this.boards) {
       const board = this.boards[oppId];
-      const hasShip = board.status.shipPlacement[coor.x][coor.y];
+      const hasShip = board.status.shipPlacement[index];
       if (hasShip === 0) {
-        board.status.attackStatus[coor.x][coor.y] = -1;
+        board.status.attackStatus[index] = -1;
       } else if (hasShip === 1) {
-        board.status.attackStatus[coor.x][coor.y] = 1;
+        board.status.attackStatus[index] = 1;
       } else {
         throw new Error('Bug: hasShip !== 0 && !== 1');
       }

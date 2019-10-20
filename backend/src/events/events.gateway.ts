@@ -7,10 +7,7 @@ import { Server, Socket } from 'socket.io';
 import { UsersService } from './services/users.service';
 import { BoardsService } from './services/boards.service';
 import { Logger } from '@nestjs/common';
-import {
-  MsgToServer,
-  Coordinate,
-} from 'src/interfaces/events.gateway.interface';
+import { MsgToServer } from 'src/interfaces/events.gateway.interface';
 import { Status, User } from 'src/interfaces/users.interface';
 
 @WebSocketGateway()
@@ -47,6 +44,8 @@ export class EventsGateway {
       name,
       oppId: '',
       status: Status.ONLINE,
+      mmr: 0,
+      ready: false,
       score: 0,
     };
     try {
@@ -194,23 +193,31 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('createBoard')
-  async createBoard(client: Socket, shipPlacement: number[][], oppId: string) {
+  async createBoard(
+    client: Socket,
+    payload: { shipPlacement: number[]; oppId: string }
+  ) {
     this.logger.log(`Event: CreateBoard`);
-    const board = await this.boardsService.placeShips(shipPlacement, client.id);
-    client.broadcast.to(oppId).emit('oppReady', {
-      event: 'CreateBoard',
-    });
-    return board;
-  }
-
-  @SubscribeMessage('attackBoard')
-  async attackBoard(client: Socket, coor: Coordinate, oppId: string) {
-    this.logger.log(`Event: AttackBoard`);
-    const board = await this.boardsService.isAttacked(coor, oppId);
-    client.broadcast.to(oppId).emit('updateYourBoard', {
-      event: 'AttackBoard',
-      board,
-    });
+    const board = await this.boardsService.placeShips(
+      payload.shipPlacement,
+      client.id
+    );
+    this.usersService.users[client.id].ready = true;
+    if (
+      this.usersService.users[client.id].ready &&
+      this.usersService.users[payload.oppId].ready
+    ) {
+      // console.log('in BothReady');
+      const rdm = Math.round(Math.random());
+      client.emit('startGame', {
+        event: 'CreateBoard',
+        coin: rdm,
+      });
+      client.broadcast.to(payload.oppId).emit('startGame', {
+        event: 'CreateBoard',
+        coin: 1 - rdm,
+      });
+    }
     return board;
   }
 
@@ -226,5 +233,29 @@ export class EventsGateway {
       event: 'BothReady',
       coin: 1 - rdm,
     });
+  }
+
+  @SubscribeMessage('fetchBoard')
+  async fetchBoard(client: Socket, oppId: string) {
+    this.logger.log(`Event: FetchBoard`);
+    const payload = {
+      yourBoard: this.boardsService.boards[client.id],
+      oppBoard: this.boardsService.boards[oppId],
+    };
+    client.emit('receiveFetchBoard', payload);
+  }
+
+  @SubscribeMessage('attackBoard')
+  async attackBoard(client: Socket, payload: { index: number; oppId: string }) {
+    this.logger.log(`Event: AttackBoard`);
+    const board = await this.boardsService.isAttacked(
+      payload.index,
+      payload.oppId
+    );
+    client.broadcast.to(payload.oppId).emit('updateYourBoard', {
+      event: 'AttackBoard',
+      board,
+    });
+    return board;
   }
 }

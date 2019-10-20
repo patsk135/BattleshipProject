@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
+import { socket } from '../../../socket';
 
-export const Board = ({ user }) => {
+export const CreateBoard = ({ user }) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
     const [ship, setShip] = useState([]);
     const [numberOfShips, setNumberOfShips] = useState(0);
     // const [count, setCount] = useState(0);
 
     const ready = () => {
-        console.log('READY!');
+        // console.log('READY!');
+        // console.log(user.oppId);
+        const payload = {
+            shipPlacement: squares,
+            oppId: user.oppId,
+        };
+        socket.emit('createBoard', payload, () => {});
     };
 
     const handleOnClick = index => {
@@ -149,7 +156,7 @@ export const Board = ({ user }) => {
                 {renderSquare()}
             </div>
             {numberOfShips !== 4 && <button onClick={placeAShip}>Place this Ship.</button>}
-            {numberOfShips === 4 && <button onClick={ready}>Ready</button>}
+            {numberOfShips === 1 && <button onClick={ready}>Ready</button>}
         </>
     );
 };

@@ -3,6 +3,8 @@ export interface User {
   name: string;
   status: Status;
   oppId: string;
+  mmr: number;
+  ready: boolean;
   score: number;
 }
 

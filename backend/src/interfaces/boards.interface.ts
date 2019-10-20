@@ -8,6 +8,6 @@ export interface Board {
 }
 
 interface BoardStatus {
-  shipPlacement: number[][];
-  attackStatus: number[][];
+  shipPlacement: number[];
+  attackStatus: number[];
 }

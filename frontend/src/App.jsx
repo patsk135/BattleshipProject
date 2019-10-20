@@ -9,12 +9,15 @@ import { InviteWindow } from './components/InviteWindow';
 import { MyStatusBox } from './components/MyStatusBox';
 import { LobbyChat } from './components/LobbyChat';
 import { AdminPage } from './components/AdminPage';
-import { Board } from './components/game/createBoard/Board';
+import { CreateBoard } from './components/game/createBoard/CreateBoard';
+import { InGameBoard } from './components/game/inGameBoard/InGameBoard';
+import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 
 function App() {
     const [user, setUser] = useState({});
     const [users, setUsers] = useState({});
     const [messages, setMessages] = useState([]);
+    const [turn, setTurn] = useState(0);
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
@@ -23,7 +26,13 @@ function App() {
     const closeInviteWindow = () => setShowInviteWindow(false);
 
     const [showCreateBoard, setShowCreateBoard] = useState(false);
-    const closeCreateBoard = () => setShowCreateBoard(false);
+
+    const [showInGameWindow, setShowInGameWindow] = useState(false);
+    const openInGameWindow = () => {
+        setShowCreateBoard(false);
+        setShowInGameWindow(true);
+    };
+    const closeInGameWindow = () => setShowInGameWindow(false);
 
     useEffect(() => {
         // Ping ///////////////////////////////////////////////
@@ -68,6 +77,13 @@ function App() {
             console.log(`PreparationStage`);
             setShowCreateBoard(true);
         });
+
+        socket.on('startGame', payload => {
+            console.log('StartGame');
+            openInGameWindow();
+            socket.emit('fetchBoard', user.oppId);
+            setTurn(payload.coin);
+        });
     }, []);
 
     return (
@@ -75,7 +91,7 @@ function App() {
             <Router>
                 <Switch>
                     <Route path='/test'>
-                        <Board></Board>
+                        <InGameWindow></InGameWindow>
                     </Route>
                     <Route path='/admin'>
                         <AdminPage></AdminPage>
@@ -84,7 +100,14 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 <div>{<MyStatusBox user={user} />}</div>
-                                {showCreateBoard && <Board></Board>}
+                                {showCreateBoard && <CreateBoard user={user}></CreateBoard>}
+                                {showInGameWindow && (
+                                    <InGameWindow
+                                        turn={turn}
+                                        setTurn={setTurn}
+                                        close={closeInGameWindow}
+                                    ></InGameWindow>
+                                )}
                                 {showLogin && <LoginModal close={closeShowLogin} />}
                                 {<OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>}
                                 {showInviteWindow && (
