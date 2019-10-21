@@ -123,6 +123,7 @@ function App() {
                     <Route path='/'>
                         <div className='App'>
                             <header className='App-header'>
+                                {/* <div>{Object.values(users)}</div> */}
                                 <div>{<MyStatusBox user={user} />}</div>
                                 {showEndGameModal && (
                                     <EndGameModal
@@ -148,13 +149,23 @@ function App() {
                                     ></InGameWindow>
                                 )}
                                 {showLogin && <LoginModal close={closeShowLogin} />}
-                                {user.status === 'ONLINE' && (
-                                    <OnlinePlayersTab user={user} users={users}></OnlinePlayersTab>
-                                )}
+                                <div className='main'>
+                                    {user.status === 'ONLINE' && (
+                                        <OnlinePlayersTab
+                                            user={user}
+                                            users={users}
+                                        ></OnlinePlayersTab>
+                                    )}
+                                    <div style={{ width: '10px' }}></div>
+                                    {user.status === 'ONLINE' && <LobbyChat messages={messages} />}
+                                </div>
                                 {showInviteWindow && (
-                                    <InviteWindow close={closeInviteWindow} user={user} />
+                                    <InviteWindow
+                                        close={closeInviteWindow}
+                                        user={user}
+                                        users={users}
+                                    />
                                 )}
-                                <div>{<LobbyChat messages={messages} />}</div>
                             </header>
                         </div>
                     </Route>

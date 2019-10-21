@@ -1,13 +1,90 @@
 .inviteWindow {
-  background-color: burlywood;
+    background-color: burlywood;
+    position: absolute;
+    width: 30%;
+    /* align-self: center; */
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    background: rgba(256, 256, 256, 0.05);
+}
+
+.inviteWindow label {
+    padding-top: 3%;
+    padding-inline-start: 3%;
+    padding-inline-end: 3%;
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 350;
+    font-size: 25px;
+    color: #000000;
+}
+
+.buttons {
+    display: inline-block;
+    display: flex;
+    padding-bottom: 3%;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 10px;
 }
 
 .buttons li {
-  display: inline-block;
-  font-family: Nunito;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    list-style-type: none;
+    flex-grow: 1;
+}
+
+.pButton {
+    width: 100px;
+    height: 40px;
+    background: rgba(0, 83, 119, 0.9);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+}
+
+.headingModal {
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 33px;
+    text-align: center;
+    margin-top: 16px;
+
+    color: #000000;
+}
+
+.secondaryButton {
+    width: 100px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 83, 119, 0.7);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+
+    color: #005377;
 }
