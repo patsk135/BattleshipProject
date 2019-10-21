@@ -12,7 +12,9 @@ export const OnlinePlayersTab = ({ user, users }) => {
     return (
         <div>
             <ul className='nav'>
-                <li>ONLINE PLAYERS</li>
+                <li className='onlinePlayers'>
+                    ONLINE<br></br>PLAYERS
+                </li>
                 <li>STATUS</li>
                 <li>SCORE</li>
             </ul>
@@ -21,7 +23,7 @@ export const OnlinePlayersTab = ({ user, users }) => {
                     .filter(one => one.id !== user.id)
                     .map(eachUser => (
                         <ul key={eachUser.id}>
-                            <li>{eachUser.name}</li>
+                            <li className='onlinePlayers'>{eachUser.name}</li>
                             <li>{eachUser.status}</li>
                             <li>{eachUser.mmr}</li>
                             <li>

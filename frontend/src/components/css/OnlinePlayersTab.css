@@ -1,63 +1,72 @@
 .nav {
-  background-color: blanchedalmond;
-  padding: 20px;
-  list-style-type: none;
-  text-align: center;
+    background-color: blanchedalmond;
+    padding: 15px 20px;
+    margin-bottom: -2%;
+    list-style-type: none;
+    text-align: center;
 }
 
 .nav li {
-  color: black;
-  display: inline-block;
-  font-family: Nunito;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+    color: black;
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    padding-left: 10%;
+    padding-right: 20px;
+}
+
+.onlinePlayers {
+    padding-left: 10%;
 }
 
 .container {
-  background-color: white;
-  display: flex;
-  flex-direction: column;
+    background-color: white;
 }
 
 .container ul {
-  background-color: #cc8888;
-  margin: 10px;
-  padding: 20px;
-  font-size: 30px;
+    background-color: white;
+    margin: 10px;
+    padding: 10px;
+    font-size: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .container ul li {
-  color: black;
-  display: inline-block;
-  font-size: 20px;
-  font-family: Nunito;
-  font-style: normal;
-  font-weight: 300;
-  padding-left: 20px;
-  padding-right: 20px;
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .inviteButton {
-  background-color: #49ba9c; /* Green */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
-  border: none;
-  color: white;
-  letter-spacing: 0.05em;
-  padding: 4px 24px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+    background-color: #49ba9c; /* Green */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    border: none;
+    color: white;
+    letter-spacing: 0.05em;
+    padding: 4px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
 
 .disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+    background: rgba(220, 220, 220, 0.8);
+    opacity: 0.6;
+    color: rgba(62, 61, 61, 0.6);
+    box-shadow: 0px 0px 0px;
+    cursor: not-allowed;
+    pointer-events: none;
 }

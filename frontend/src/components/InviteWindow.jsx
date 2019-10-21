@@ -20,10 +20,14 @@ export const InviteWindow = ({ close, user, users }) => {
             <label>Invitation from {users[user.oppId] && users[user.oppId].name}</label>
             <div className='buttons'>
                 <li>
-                    <button onClick={accept}>Accept</button>
+                    <button onClick={accept} className='primaryButton acceptBt'>
+                        Accept
+                    </button>
                 </li>
                 <li>
-                    <button onClick={reject}>Reject</button>
+                    <button onClick={reject} className='secondaryButton'>
+                        Reject
+                    </button>
                 </li>
             </div>
         </div>
