@@ -1,0 +1,58 @@
+.adminPageHeader {
+    text-align: center;
+    background-color: aquamarine;
+}
+
+.adminPageHeader li {
+    text-align: center;
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-top: 30px;
+  }
+
+.adminPagePlayers {
+    margin-top: 20px
+
+}
+
+.adminPagePlayersPool {
+    padding: 10px;
+    background: skyblue;
+    border-width: 5px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.adminPageStatusBoard {
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.adminPageStatus {
+    text-align: center;
+     display: grid;
+     grid-template-columns: 1fr 2fr 1fr 2fr 1fr 1fr;
+}
+
+.adminPageStatus > ul {
+    background: #eeeeee;
+    padding: 1em;
+}
+
+.adminPageStatus > ul:nth-child(odd) {
+    background: #dddddd;
+}
+
+.resetBtn {
+    color: white;
+    background: blueviolet;
+}
+  
