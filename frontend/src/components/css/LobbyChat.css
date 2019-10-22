@@ -8,12 +8,22 @@
     list-style-type: none;
     text-align: left;
     padding-left: 0%;
+    font-size: 20px;
 }
 
 .btn {
+    background-color: #49ba9c;
     padding: 0.75rem 1.5rem;
     font-size: 0.75rem;
     border-radius: 0.3rem;
+    color: white;
+    letter-spacing: 0.02em;
+    padding: 4px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
 }
 
 .card {

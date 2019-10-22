@@ -13,6 +13,7 @@ import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
+import { UserStatusBar } from './components/UserStatusBar';
 
 function App() {
     const [user, setUser] = useState({});
@@ -139,7 +140,8 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 {/* <div>{Object.values(users)}</div> */}
-                                <div>{<MyStatusBox user={user} />}</div>
+                                {/* {<div>{<MyStatusBox user={user} />}</div>} */}
+                                {<div>{<UserStatusBar user={user} />}</div>}
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}

@@ -1,0 +1,61 @@
+.myHelloBox {
+    background-color: white;
+    border-radius: 4px;
+    width: 250px;
+    padding-top: 3%;
+    padding-right: 5%;
+}
+
+.myHelloBox li {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-start; */
+    align-items: flex-end;
+
+    color: black;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+
+    padding-bottom: -5%;
+    list-style-type: none;
+}
+
+.buttonss {
+    display: inline-flex;
+    padding: 5% 15%;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.buttonss li {
+    padding-bottom: 2%;
+}
+
+.widthBt {
+    width: 100px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 10px;
+}
+
+.hello {
+    font-size: 20px;
+    line-height: 33px;
+    text-align: right;
+    letter-spacing: 0.05em;
+}
+
+.score {
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+}
+
+.status {
+    font-size: 16px;
+    line-height: 33px;
+    text-align: right;
+    letter-spacing: 0.05em;
+}
