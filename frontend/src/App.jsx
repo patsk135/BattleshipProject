@@ -141,11 +141,11 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 {/* {<div>{<MyStatusBox user={user} />}</div>} */}
-        {
-          showLogin
-            ? <LoginModal close={closeShowLogin} />
-            : <Lobby user={user} users={users} messages={messages} />
-        }
+                                {
+                                  showLogin
+                                    ? <LoginModal close={closeShowLogin} />
+                                    : <Lobby user={user} users={users} messages={messages} />
+                                }
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}
@@ -170,17 +170,6 @@ function App() {
                                         close={closeInGameWindow}
                                     ></InGameWindow>
                                 )}
-                                {/* {showLogin && <LoginModal close={closeShowLogin} />}
-                                <div className='main'>
-                                    {user.status === 'ONLINE' && (
-                                        <OnlinePlayersTab
-                                            user={user}
-                                            users={users}
-                                        ></OnlinePlayersTab>
-                                    )}
-                                    <div style={{ width: '10px' }}></div>
-                                    {user.status === 'ONLINE' && <LobbyChat messages={messages} />}
-                                </div> */}
                                 {showInviteWindow && (
                                     <InviteWindow
                                         close={closeInviteWindow}
