@@ -27,6 +27,7 @@
 }
 
 .card {
+    flex: 1;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;
