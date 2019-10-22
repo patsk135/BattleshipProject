@@ -7,8 +7,10 @@ import { Server, Socket } from 'socket.io';
 import { UsersService } from './services/users.service';
 import { BoardsService } from './services/boards.service';
 import { Logger } from '@nestjs/common';
-import { MsgToServer } from '../interfaces/events.gateway.interface';
+import { MsgToServer, Room } from '../interfaces/common.interface';
 import { Status, User } from '../interfaces/users.interface';
+
+import { ROOMS, i } from '../mocks/rooms.mocks';
 
 @WebSocketGateway()
 export class EventsGateway {
@@ -29,26 +31,41 @@ export class EventsGateway {
 
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    if (
-      this.usersService.users[client.id] !== undefined &&
-      this.usersService.users[client.id].oppId !== ''
-    ) {
-      const oppId = this.usersService.users[client.id].oppId;
-      if (this.usersService.users[oppId].status === Status.INGAME) {
+    console.log('Before');
+    console.log(ROOMS);
+    ROOMS.splice(
+      ROOMS.findIndex(room => {
+        if (room.player1 === client.id || room.player2 === client.id) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+      1
+    );
+    console.log('After');
+    console.log(ROOMS);
+
+    delete this.boardsService.boards[client.id];
+
+    const user = this.usersService.users[client.id];
+    if (user !== undefined && user.oppId !== '') {
+      const opp = this.usersService.users[user.oppId];
+      if (opp.status === Status.INGAME) {
         const updatedUser: User = {
-          ...this.usersService.users[oppId],
+          ...opp,
           oppId: '',
           status: Status.ONLINE,
           ready: false,
-          hit: 0,
           score: 0,
           yourTurn: false,
         };
         updatedUser.mmr = updatedUser.mmr + 1;
         this.usersService.updateUser(updatedUser);
-        client.broadcast.to(oppId).emit('finishGame', 'oppDisconnect');
+        client.broadcast.to(opp.id).emit('finishGame', 'oppDisconnect');
       }
     }
+
     const users = await this.usersService.deleteUser(client.id);
     const payload = {
       event: this.handleDisconnect.name,
@@ -67,7 +84,6 @@ export class EventsGateway {
       status: Status.ONLINE,
       mmr: 0,
       ready: false,
-      hit: 0,
       score: 0,
       yourTurn: false,
     };
@@ -78,12 +94,15 @@ export class EventsGateway {
         users,
       };
       this.server.emit('refreshOnlineUsers', payload1);
+
       const payload2 = {
         event: this.createUser.name,
         user: users[client.id],
       };
       client.emit('returnUpdatedUser', payload2);
+
       await this.boardsService.initBoard(client.id);
+
       return false;
     } catch (err) {
       return { message: err.message };
@@ -158,6 +177,7 @@ export class EventsGateway {
       oppId,
     };
     const users = await this.usersService.updateUser(updatedUser);
+
     client.emit('returnUpdatedUser', {
       event: 'SendInvitaion',
       user: users[client.id],
@@ -171,34 +191,42 @@ export class EventsGateway {
   @SubscribeMessage('acceptInvitation')
   async moveToPreparationStage(client: Socket, oppId: string) {
     this.logger.log(`Event: AcceptInvitation`);
-    if (this.usersService.users[oppId].status === Status.ONLINE) {
-      const prevOpp = this.usersService.users[oppId];
+    const user = this.usersService.users[client.id];
+    const opp = this.usersService.users[oppId];
+    if (opp.status === Status.ONLINE) {
+      const room: Room = {
+        player1: client.id,
+        player2: oppId,
+      };
+      ROOMS.push(room);
+
       const updatedOpp = {
-        ...prevOpp,
+        ...opp,
         status: Status.INGAME,
         oppId: client.id,
       };
+      this.usersService.updateUser(updatedOpp);
       client.broadcast.to(oppId).emit('returnUpdatedUser', {
         event: 'AcceptInvitation',
-        user: (await this.usersService.updateUser(updatedOpp))[oppId],
+        user: updatedOpp,
       });
-      const prevUser = this.usersService.users[client.id];
+
       const updatedUser = {
-        ...prevUser,
+        ...user,
         status: Status.INGAME,
         oppId,
       };
-      const users = await this.usersService.updateUser(updatedUser);
       client.emit('returnUpdatedUser', {
         event: 'AcceptInvitation',
-        user: users[client.id],
+        user: updatedUser,
       });
+
+      const users = await this.usersService.updateUser(updatedUser);
       const payload = {
         event: 'AcceptInvitation',
         users,
       };
       this.server.emit('refreshOnlineUsers', payload);
-      // Emit event to both
       client.broadcast.to(oppId).emit('preparationStage', {
         event: 'AcceptInvitation',
       });
@@ -214,49 +242,34 @@ export class EventsGateway {
   async createBoard(client: Socket, shipPlacement: number[]) {
     this.logger.log(`Event: CreateBoard`);
     const board = await this.boardsService.placeShips(shipPlacement, client.id);
-    this.usersService.users[client.id].ready = true;
-    if (
-      this.usersService.users[client.id].ready &&
-      this.usersService.users[this.usersService.users[client.id].oppId].ready
-    ) {
+    const user = this.usersService.users[client.id];
+    const opp = this.usersService.users[user.oppId];
+
+    user.ready = true;
+
+    if (user.ready && opp.ready) {
+      console.log('in BothReady');
       const payload = {
         yourBoard: board,
-        oppBoard: this.boardsService.boards[
-          this.usersService.users[client.id].oppId
-        ],
+        oppBoard: this.boardsService.boards[opp.id],
       };
       client.emit('receiveFetchBoard', payload);
-      // console.log('in BothReady');
-      if (
-        this.usersService.users[client.id].yourTurn ||
-        this.usersService.users[this.usersService.users[client.id].oppId]
-          .yourTurn
-      ) {
-        this.usersService.users[client.id].yourTurn = !this.usersService.users[
-          client.id
-        ].yourTurn;
-        this.usersService.users[
-          this.usersService.users[client.id].oppId
-        ].yourTurn = !this.usersService.users[
-          this.usersService.users[client.id].oppId
-        ].yourTurn;
+
+      if (user.yourTurn || opp.yourTurn) {
+        user.yourTurn = !user.yourTurn;
+        opp.yourTurn = !opp.yourTurn;
       } else {
         const rdm = Math.round(Math.random());
-        this.usersService.users[client.id].yourTurn = rdm === 1 ? true : false;
-        this.usersService.users[
-          this.usersService.users[client.id].oppId
-        ].yourTurn = rdm === 0 ? true : false;
+        user.yourTurn = rdm === 1 ? true : false;
+        opp.yourTurn = rdm === 0 ? true : false;
       }
       client.emit('startGame', {
         event: 'CreateBoard',
       });
-      client.broadcast
-        .to(this.usersService.users[client.id].oppId)
-        .emit('startGame', {
-          event: 'CreateBoard',
-        });
+      client.broadcast.to(opp.id).emit('startGame', {
+        event: 'CreateBoard',
+      });
     }
-    return board;
   }
 
   @SubscribeMessage('fetchBoard')
@@ -274,80 +287,104 @@ export class EventsGateway {
   @SubscribeMessage('attackBoard')
   async attackBoard(client: Socket, index: number) {
     this.logger.log(`Event: AttackBoard`);
-    const oppId = this.usersService.users[client.id].oppId;
-    this.usersService.users[client.id].yourTurn = false;
-    this.usersService.users[oppId].yourTurn = true;
+    const user = this.usersService.users[client.id];
+    const opp = this.usersService.users[user.oppId];
+
+    user.yourTurn = false;
+    opp.yourTurn = true;
+
     const payload1 = {
       event: 'AttackBoard',
-      user: this.usersService.users[client.id],
-    };
-    const payload2 = {
-      event: 'AttackBoard',
-      user: this.usersService.users[oppId],
+      user,
     };
     client.emit('returnUpdatedUser', payload1);
-    client.broadcast.to(oppId).emit('returnUpdatedUser', payload2);
+
+    const payload2 = {
+      event: 'AttackBoard',
+      user: opp,
+    };
+    client.broadcast.to(opp.id).emit('returnUpdatedUser', payload2);
+
+    const board = this.boardsService.boards[opp.id];
     if (index === -1) {
-      const board = this.boardsService.boards[oppId];
-      client.broadcast.to(oppId).emit('updateYourBoard', {
+      client.broadcast.to(opp.id).emit('updateYourBoard', {
         event: 'AttackBoard',
         yourBoard: board,
       });
     } else {
-      if (this.boardsService.boards[oppId].status.shipPlacement[index] === 1) {
-        client.broadcast.to(oppId).emit('increaseOppHit');
+      if (board.status.shipPlacement[index] === 1) {
+        client.broadcast.to(opp.id).emit('increaseOppHit');
       }
-      const board = await this.boardsService.isAttacked(index, oppId);
-      client.broadcast.to(oppId).emit('updateYourBoard', {
+      const newBoard = await this.boardsService.isAttacked(index, opp.id);
+      client.broadcast.to(opp.id).emit('updateYourBoard', {
         event: 'AttackBoard',
-        yourBoard: board,
+        yourBoard: newBoard,
       });
-      return board;
+      return newBoard;
     }
   }
 
   @SubscribeMessage('winThisRound')
   async transitionToNextRound(client: Socket, index: number) {
     this.logger.log(`Event: WinThisRound`);
-    this.usersService.users[client.id].score =
-      this.usersService.users[client.id].score + 1;
-    if (this.usersService.users[client.id].score === 3) {
-      const mmrDiff =
-        this.usersService.users[client.id].score -
-        this.usersService.users[this.usersService.users[client.id].oppId].score;
-      this.usersService.users[client.id].mmr += mmrDiff;
-      this.usersService.users[
-        this.usersService.users[client.id].oppId
-      ].mmr -= mmrDiff;
-      this.usersService.users[client.id].status = Status.ONLINE;
-      this.usersService.users[client.id].yourTurn = false;
-      this.usersService.users[client.id].score = 0;
-      this.usersService.users[this.usersService.users[client.id].oppId].status =
-        Status.ONLINE;
-      this.usersService.users[
-        this.usersService.users[client.id].oppId
-      ].yourTurn = false;
-      this.usersService.users[
-        this.usersService.users[client.id].oppId
-      ].score = 0;
+    const user = this.usersService.users[client.id];
+    const opp = this.usersService.users[user.oppId];
+    user.score = user.score + 1;
+    if (user.score === 2) {
+      delete this.boardsService.boards[client.id];
+      delete this.boardsService.boards[opp.id];
+
+      const mmrDiff = user.score - opp.score;
+
+      const updatedUser = {
+        ...user,
+        status: Status.ONLINE,
+        oppId: '',
+        mmr: user.mmr + mmrDiff,
+        ready: false,
+        score: 0,
+        yourTurn: false,
+      };
+      this.usersService.updateUser(updatedUser);
+
+      const updatedOpp = {
+        ...opp,
+        status: Status.ONLINE,
+        oppId: '',
+        mmr: user.mmr - mmrDiff,
+        ready: false,
+        score: 0,
+        yourTurn: false,
+      };
+      this.usersService.updateUser(updatedOpp);
+
       client.emit('finishGame', 'win');
-      client.broadcast
-        .to(this.usersService.users[client.id].oppId)
-        .emit('finishGame', 'lose');
+      client.broadcast.to(opp.id).emit('finishGame', 'lose');
+
       const payload = {
         event: 'WinThisRound',
         users: this.usersService.users,
       };
       this.server.emit('refreshOnlineUsers', payload);
+
+      ROOMS.splice(
+        ROOMS.findIndex(room => {
+          if (
+            room.player1 === client.id ||
+            room.player1 === this.usersService.users[client.id].oppId
+          ) {
+            return false;
+          } else {
+            return true;
+          }
+        }),
+        1
+      );
     } else {
-      this.usersService.users[client.id].ready = false;
-      this.usersService.users[
-        this.usersService.users[client.id].oppId
-      ].ready = false;
+      user.ready = false;
+      opp.ready = false;
       client.emit('nextRound', 'win');
-      client.broadcast
-        .to(this.usersService.users[client.id].oppId)
-        .emit('nextRound', 'lose');
+      client.broadcast.to(opp.id).emit('nextRound', 'lose');
     }
   }
 }

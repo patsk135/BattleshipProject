@@ -4,6 +4,7 @@ import { InGameBoard } from './InGameBoard';
 import '../../css/InGameWindow.css';
 
 export const InGameWindow = ({ user, users }) => {
+    const [start, setStart] = useState(false);
     const [yourBoard, setYourBoard] = useState(null);
     const [oppBoard, setOppBoard] = useState(null);
     const [oppScore, setOppScore] = useState(0);
@@ -23,6 +24,7 @@ export const InGameWindow = ({ user, users }) => {
             setTimer(10);
             setOppScore(0);
             setYourScore(0);
+            setStart(true);
         });
 
         socket.on('updateYourBoard', payload => {
@@ -51,20 +53,20 @@ export const InGameWindow = ({ user, users }) => {
     useEffect(() => {}, []);
 
     return (
-        <>
+        <div>
             {user.yourTurn && <div>Timer: {timer}</div>}
             {!user.yourTurn && <div>Waiting</div>}
             <div className={`boards ${!user.yourTurn && 'avoid-clicks'}`}>
                 <div>
                     Your Board
-                    {
+                    {start && (
                         <InGameBoard
                             name={user.name}
                             boardStatus={yourBoard}
                             hit={yourScore}
                             isOwner={true}
                         ></InGameBoard>
-                    }
+                    )}
                 </div>
                 <div
                     style={{
@@ -73,7 +75,7 @@ export const InGameWindow = ({ user, users }) => {
                 ></div>
                 <div>
                     Opponent Board
-                    {
+                    {start && (
                         <InGameBoard
                             name={users[user.oppId].name}
                             boardStatus={oppBoard}
@@ -82,9 +84,9 @@ export const InGameWindow = ({ user, users }) => {
                             setOppBoard={setOppBoard}
                             increaseYourHit={increaseYourHit}
                         ></InGameBoard>
-                    }
+                    )}
                 </div>
             </div>
-        </>
+        </div>
     );
 };

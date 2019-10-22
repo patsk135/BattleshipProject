@@ -139,7 +139,6 @@ function App() {
                     <Route path='/'>
                         <div className='App'>
                             <header className='App-header'>
-                                {/* <div>{Object.values(users)}</div> */}
                                 {/* {<div>{<MyStatusBox user={user} />}</div>} */}
                                 {!showLogin && <UserStatusBar user={user} />}
                                 {showEndGameModal && (

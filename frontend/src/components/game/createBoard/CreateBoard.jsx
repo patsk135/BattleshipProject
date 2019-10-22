@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { socket } from '../../../socket';
 import './css/CreateBoard.css';
 
-export const CreateBoard = ({ user }) => {
+export const CreateBoard = () => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
     const [ship, setShip] = useState([]);
     const [numberOfShips, setNumberOfShips] = useState(0);
@@ -11,7 +11,7 @@ export const CreateBoard = ({ user }) => {
     const ready = () => {
         // console.log('READY!');
         // console.log(user.oppId);
-        socket.emit('createBoard', squares, () => {});
+        socket.emit('createBoard', squares);
     };
 
     const handleOnClick = index => {

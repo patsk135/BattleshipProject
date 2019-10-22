@@ -5,7 +5,6 @@ export interface User {
   oppId: string;
   mmr: number;
   ready: boolean;
-  hit: 0;
   score: number;
   yourTurn: boolean;
 }

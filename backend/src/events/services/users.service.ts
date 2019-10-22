@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { USERS } from '../../mocks/users.mocks';
 import { User, Users } from '../../interfaces/users.interface';
 
