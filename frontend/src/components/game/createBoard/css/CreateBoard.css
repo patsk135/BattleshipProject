@@ -1,0 +1,38 @@
+.containerBoard{
+    background: white;
+
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
+#placeShip{
+    background: rgba(0, 83, 119, 0.9);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    color: white;
+    width: 300px;
+    height: 58;
+}
+
+#ready{
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    color: rgba(0, 83, 119, 0.9);
+    width: 300px;
+    height: 58; 
+
+    margin-top: 5px;
+    margin-bottom: 3px;
+}

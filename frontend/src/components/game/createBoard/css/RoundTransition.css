@@ -1,0 +1,37 @@
+.container{
+    color: white;
+    border-radius: 20px;
+    width: 562px;
+    height: 144px;
+
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
+#tt{
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    color: black;
+
+    margin-top: 3%;
+}
+
+#nextRound{
+    background: rgba(0, 83, 119, 0.9);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    color: white;
+    width: 300px;
+    height: 58;
+
+    margin-top: 2%;
+}
+

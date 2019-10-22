@@ -1,4 +1,5 @@
 import React from 'react';
+import "./css/RoundTransition.css";
 
 export const RoundTransition = ({ user, msg, openCreateBoard, closeTransition }) => {
     const onClickHandler = () => {
@@ -6,9 +7,9 @@ export const RoundTransition = ({ user, msg, openCreateBoard, closeTransition })
         openCreateBoard();
     };
     return (
-        <div>
-            You {msg}. Your score is {user.score}
-            <button onClick={onClickHandler}>Next Round.</button>
+        <div class="container">
+                <div id="tt">You {msg}. Your score is {user.score}! </div>
+                <button id="nextRound" onClick={onClickHandler}>Next Round.</button>          
         </div>
     );
 };

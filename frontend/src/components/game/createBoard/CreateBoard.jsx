@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { socket } from '../../../socket';
+import "./Createboard.css";
 
 export const CreateBoard = ({ user }) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
@@ -95,7 +96,7 @@ export const CreateBoard = ({ user }) => {
             setNumberOfShips(numberOfShips + 1);
         } else {
             if (numberOfShips === 4) {
-                console.log('You are already have 4 ships!');
+                console.log('You already have 4 ships!');
                 console.log('Please Click Ready!');
             } else {
                 console.log('Ship must be 4 consecutive blocks');
@@ -141,18 +142,25 @@ export const CreateBoard = ({ user }) => {
 
     return (
         <>
-            <div
+        <div class="containerBoard">
+        <div
                 style={{
                     width: '500px',
                     height: '500px',
                     display: 'flex',
                     flexWrap: 'wrap',
+                    
                 }}
             >
                 {renderSquare()}
             </div>
-            {numberOfShips !== 4 && <button onClick={placeAShip}>Place this Ship.</button>}
-            {numberOfShips >= 1 && <button onClick={ready}>Ready</button>}
+            </div>
+
+            {numberOfShips !== 4 && <button id="placeShip" onClick={placeAShip}>Place Ship</button>}
+            {numberOfShips >= 1 && <button id="ready" onClick={ready}>Ready</button>}
         </>
     );
 };
+
+
+
