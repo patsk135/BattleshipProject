@@ -12,7 +12,7 @@ import { EventsModule } from './events/events.module';
       rootPath: join(__dirname, '../', 'build'),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

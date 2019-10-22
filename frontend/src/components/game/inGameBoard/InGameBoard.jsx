@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { BoardSquare } from './BoardSquare';
 import { socket } from '../../../socket';
 
-export const InGameBoard = ({ boardStatus, isOwner, setOppBoard }) => {
+export const InGameBoard = ({ name, boardStatus, hit, isOwner, setOppBoard, increaseYourHit }) => {
     const [squares, setSquares] = useState([]);
     const [score, setScore] = useState(0);
 
     const handleSquareClick = i => {
         if (!isOwner && boardStatus.attackStatus[i] !== 1) {
             // console.log(`Attack position x:${x} y:${y}`);
-            socket.emit('attackBoard', i);
             const { shipPlacement, attackStatus } = boardStatus;
             if (shipPlacement[i] === 1) {
                 setScore(score + 1);
+                increaseYourHit();
             }
             attackStatus[i] = 1;
             setOppBoard(prev => {
                 return { ...prev, attackStatus };
             });
+            socket.emit('attackBoard', i);
         } else {
             console.log(`Can't attack your own board.`);
         }
@@ -59,13 +60,16 @@ export const InGameBoard = ({ boardStatus, isOwner, setOppBoard }) => {
         }
         if (score === 4) {
             setScore(0);
-            console.log('You win.');
+            // console.log('You win.');
             socket.emit('winThisRound');
         }
     }, [boardStatus]);
 
     return (
         <div>
+            <div>
+                {name}: {hit} hit(s)
+            </div>
             <div
                 style={{
                     width: '300px',

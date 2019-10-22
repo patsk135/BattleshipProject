@@ -40,16 +40,12 @@ export class EventsGateway {
           oppId: '',
           status: Status.ONLINE,
           ready: false,
+          hit: 0,
           score: 0,
           yourTurn: false,
         };
         updatedUser.mmr = updatedUser.mmr + 1;
         this.usersService.updateUser(updatedUser);
-        // const payload = {
-        //   event: 'Handle Disconnection',
-        //   user: updatedUser,
-        // };
-        // client.broadcast.to(oppId).emit('returnUpdatedUser', payload);
         client.broadcast.to(oppId).emit('finishGame', 'oppDisconnect');
       }
     }
@@ -71,6 +67,7 @@ export class EventsGateway {
       status: Status.ONLINE,
       mmr: 0,
       ready: false,
+      hit: 0,
       score: 0,
       yourTurn: false,
     };
@@ -124,16 +121,12 @@ export class EventsGateway {
     this.server.emit('refreshOnlineUsers', payload);
   }
 
-  // count: number = 0;
-
   @SubscribeMessage('pingToServer')
   ping(client: Socket, ping: any) {
-    // this.logger.log(`Event: PingToServer => count: ${++this.count}`);
     const msg = `${client.id}: Ping! ${Date().toString()}`;
     const payload = {
       event: this.ping.name,
       msg,
-      // count: this.count,
     };
     client.emit('pingToClient', payload);
   }
@@ -165,7 +158,6 @@ export class EventsGateway {
       oppId,
     };
     const users = await this.usersService.updateUser(updatedUser);
-    // console.log(users[client.id]);
     client.emit('returnUpdatedUser', {
       event: 'SendInvitaion',
       user: users[client.id],
@@ -179,11 +171,7 @@ export class EventsGateway {
   @SubscribeMessage('acceptInvitation')
   async moveToPreparationStage(client: Socket, oppId: string) {
     this.logger.log(`Event: AcceptInvitation`);
-    // console.log('Still in here');
-    // console.log(`oppId: ${oppId}, clientID: ${client.id}`);
-    // console.log(this.usersService.users[oppId]);
     if (this.usersService.users[oppId].status === Status.ONLINE) {
-      // console.log('In IF');
       const prevOpp = this.usersService.users[oppId];
       const updatedOpp = {
         ...prevOpp,
@@ -218,7 +206,6 @@ export class EventsGateway {
         event: 'AcceptInvitation',
       });
     } else {
-      // console.log('In ELSE');
       return { message: `Opponent status !== ONLINE` };
     }
   }
@@ -306,8 +293,10 @@ export class EventsGateway {
         event: 'AttackBoard',
         yourBoard: board,
       });
-      return board;
     } else {
+      if (this.boardsService.boards[oppId].status.shipPlacement[index] === 1) {
+        client.broadcast.to(oppId).emit('increaseOppHit');
+      }
       const board = await this.boardsService.isAttacked(index, oppId);
       client.broadcast.to(oppId).emit('updateYourBoard', {
         event: 'AttackBoard',
@@ -355,7 +344,6 @@ export class EventsGateway {
       this.usersService.users[
         this.usersService.users[client.id].oppId
       ].ready = false;
-      this.usersService.users[client.id].score += 1;
       client.emit('nextRound', 'win');
       client.broadcast
         .to(this.usersService.users[client.id].oppId)

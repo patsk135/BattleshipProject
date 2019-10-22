@@ -10,12 +10,6 @@ export class BoardsService {
     if (userId in this.boards) {
       throw new Error('User already has a board!');
     }
-    // const shipPlacement: number[][] = new Array(8)
-    //   .fill(false)
-    //   .map(() => new Array(8).fill(0));
-    // const attackStatus: number[][] = new Array(8)
-    //   .fill(false)
-    //   .map(() => new Array(8).fill(0));
     const shipPlacement: number[] = new Array(64).fill(0);
     const attackStatus: number[] = new Array(64).fill(0);
     const board: Board = {
@@ -51,14 +45,6 @@ export class BoardsService {
     if (oppId in this.boards) {
       const board = this.boards[oppId];
       board.status.attackStatus[index] = 1;
-      // const hasShip = board.status.shipPlacement[index];
-      // if (hasShip === 0) {
-      //   board.status.attackStatus[index] = -1;
-      // } else if (hasShip === 1) {
-      //   board.status.attackStatus[index] = 1;
-      // } else {
-      //   throw new Error('Bug: hasShip !== 0 && !== 1');
-      // }
       return board;
     } else {
       throw new Error(`User doesn't have board!`);

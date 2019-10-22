@@ -6,7 +6,7 @@ import { socket } from './socket';
 import { LoginModal } from './components/LoginModal';
 import { OnlinePlayersTab } from './components/OnlinePlayersTab';
 import { InviteWindow } from './components/InviteWindow';
-import { MyStatusBox } from './components/MyStatusBox';
+// import { MyStatusBox } from './components/MyStatusBox';
 import { LobbyChat } from './components/LobbyChat';
 import { AdminPage } from './components/AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
@@ -162,6 +162,7 @@ function App() {
                                 {showInGameWindow && (
                                     <InGameWindow
                                         user={user}
+                                        users={users}
                                         close={closeInGameWindow}
                                     ></InGameWindow>
                                 )}

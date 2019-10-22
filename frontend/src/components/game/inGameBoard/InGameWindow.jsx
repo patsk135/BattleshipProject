@@ -3,16 +3,38 @@ import { socket } from '../../../socket';
 import { InGameBoard } from './InGameBoard';
 import '../../css/InGameWindow.css';
 
-export const InGameWindow = ({ user }) => {
+export const InGameWindow = ({ user, users }) => {
     const [yourBoard, setYourBoard] = useState(null);
     const [oppBoard, setOppBoard] = useState(null);
+    const [oppScore, setOppScore] = useState(0);
+    const [yourScore, setYourScore] = useState(0);
     const [timer, setTimer] = useState(10);
 
+    const increaseYourHit = () => {
+        setYourScore(yourScore + 1);
+    };
+
     useEffect(() => {
+        socket.on('receiveFetchBoard', payload => {
+            console.log('in fetchBoard');
+            console.log(payload);
+            setYourBoard(payload.yourBoard.status);
+            setOppBoard(payload.oppBoard.status);
+            setTimer(10);
+            setOppScore(0);
+            setYourScore(0);
+        });
+
         socket.on('updateYourBoard', payload => {
             console.log('in updateBoard');
+            // console.log(payload);
             setYourBoard(payload.yourBoard.status);
             setTimer(10);
+        });
+
+        socket.on('increaseOppHit', () => {
+            console.log('in increaseOppHit');
+            setOppScore(oppScore => oppScore + 1);
         });
     }, []);
 
@@ -26,14 +48,7 @@ export const InGameWindow = ({ user }) => {
         return () => clearInterval(intervalId);
     }, [timer]);
 
-    useEffect(() => {
-        socket.on('receiveFetchBoard', payload => {
-            console.log('in fetchBoard');
-            console.log(payload);
-            setYourBoard(payload.yourBoard.status);
-            setOppBoard(payload.oppBoard.status);
-        });
-    }, [user]);
+    useEffect(() => {}, []);
 
     return (
         <>
@@ -41,7 +56,15 @@ export const InGameWindow = ({ user }) => {
             {!user.yourTurn && <div>Waiting</div>}
             <div className={`boards ${!user.yourTurn && 'avoid-clicks'}`}>
                 <div>
-                    Your Board{<InGameBoard boardStatus={yourBoard} isOwner={true}></InGameBoard>}
+                    Your Board
+                    {
+                        <InGameBoard
+                            name={user.name}
+                            boardStatus={yourBoard}
+                            hit={yourScore}
+                            isOwner={true}
+                        ></InGameBoard>
+                    }
                 </div>
                 <div
                     style={{
@@ -52,9 +75,12 @@ export const InGameWindow = ({ user }) => {
                     Opponent Board
                     {
                         <InGameBoard
+                            name={users[user.oppId].name}
                             boardStatus={oppBoard}
+                            hit={oppScore}
                             isOwner={false}
                             setOppBoard={setOppBoard}
+                            increaseYourHit={increaseYourHit}
                         ></InGameBoard>
                     }
                 </div>
