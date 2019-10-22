@@ -1,5 +1,5 @@
 .chatBox {
-    height: 300px;
+    height: 50%;
     overflow-y: scroll;
     color: black;
 }
@@ -8,7 +8,7 @@
     list-style-type: none;
     text-align: left;
     padding-left: 0%;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .btn {
@@ -27,6 +27,7 @@
 }
 
 .card {
+    height: 100%;
     flex: 1;
     position: relative;
     display: -webkit-box;
