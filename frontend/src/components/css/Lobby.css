@@ -1,0 +1,12 @@
+.lobby-container {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100vw;
+  height: 100vh;
+  padding: 5% 22%;
+}
+
+.lobby-right-container {
+  display: flex;
+  flex-flow: column nowrap;
+}
