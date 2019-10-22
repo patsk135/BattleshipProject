@@ -14,6 +14,7 @@ import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
 import { UserStatusBar } from './components/UserStatusBar';
+import { Lobby } from './components/Lobby';
 
 function App() {
     const [user, setUser] = useState({});
@@ -140,7 +141,11 @@ function App() {
                         <div className='App'>
                             <header className='App-header'>
                                 {/* {<div>{<MyStatusBox user={user} />}</div>} */}
-                                {!showLogin && <UserStatusBar user={user} />}
+        {
+          showLogin
+            ? <LoginModal close={closeShowLogin} />
+            : <Lobby user={user} users={users} messages={messages} />
+        }
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}
@@ -165,7 +170,7 @@ function App() {
                                         close={closeInGameWindow}
                                     ></InGameWindow>
                                 )}
-                                {showLogin && <LoginModal close={closeShowLogin} />}
+                                {/* {showLogin && <LoginModal close={closeShowLogin} />}
                                 <div className='main'>
                                     {user.status === 'ONLINE' && (
                                         <OnlinePlayersTab
@@ -175,7 +180,7 @@ function App() {
                                     )}
                                     <div style={{ width: '10px' }}></div>
                                     {user.status === 'ONLINE' && <LobbyChat messages={messages} />}
-                                </div>
+                                </div> */}
                                 {showInviteWindow && (
                                     <InviteWindow
                                         close={closeInviteWindow}

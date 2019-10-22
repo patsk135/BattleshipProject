@@ -10,13 +10,11 @@ export const OnlinePlayersTab = ({ user, users }) => {
     };
 
     return (
-        <div>
+        <div className='online-players-container'>
             <ul className='nav'>
-                <li className='onlinePlayers'>
-                    ONLINE<br></br>PLAYERS
-                </li>
-                <li>STATUS</li>
-                <li>SCORE</li>
+                <p>ONLINE<br/>PLAYERS</p>
+                <p>STATUS</p>
+                <p>SCORE</p>
             </ul>
             <div className='container'>
                 {Object.values(users)

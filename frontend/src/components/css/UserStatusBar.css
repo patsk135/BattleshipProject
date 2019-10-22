@@ -1,5 +1,6 @@
 .myHelloBox {
     width: 250px;
+    height: 350px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
