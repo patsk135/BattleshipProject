@@ -6,7 +6,7 @@ export const UserStatusBar = ({ user }) => {
     return (
         <div className='myHelloBox'>
             <li className='hello'>Hello, {user.name}</li>
-            <li className='score'>{user.score}</li>
+            <li className='MMR'>{user.mmr}</li>
             <li className='status'>{user.status}</li>
             <div className='buttonss'>
                 <li>
