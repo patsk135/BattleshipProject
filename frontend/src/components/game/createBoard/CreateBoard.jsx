@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { socket } from '../../../socket';
-import "./Createboard.css";
+import './css/CreateBoard.css';
 
 export const CreateBoard = ({ user }) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
@@ -142,25 +142,20 @@ export const CreateBoard = ({ user }) => {
 
     return (
         <>
-        <div class="containerBoard">
-        <div
-                style={{
-                    width: '500px',
-                    height: '500px',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    
-                }}
-            >
-                {renderSquare()}
-            </div>
+            <div className='containerBoard'>
+                <div>{renderSquare()}</div>
             </div>
 
-            {numberOfShips !== 4 && <button id="placeShip" onClick={placeAShip}>Place Ship</button>}
-            {numberOfShips >= 1 && <button id="ready" onClick={ready}>Ready</button>}
+            {numberOfShips !== 4 && (
+                <button id='placeShip' onClick={placeAShip}>
+                    Place Ship
+                </button>
+            )}
+            {numberOfShips >= 1 && (
+                <button id='ready' onClick={ready}>
+                    Ready
+                </button>
+            )}
         </>
     );
 };
-
-
-

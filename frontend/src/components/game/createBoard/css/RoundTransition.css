@@ -1,4 +1,4 @@
-.container{
+.roundContainer {
     color: white;
     border-radius: 20px;
     width: 562px;
@@ -9,7 +9,7 @@
     align-content: center;
 }
 
-#tt{
+#tt {
     display: inline-block;
     font-family: Nunito;
     font-style: normal;
@@ -19,7 +19,7 @@
     margin-top: 3%;
 }
 
-#nextRound{
+#nextRound {
     background: rgba(0, 83, 119, 0.9);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
@@ -34,4 +34,3 @@
 
     margin-top: 2%;
 }
-

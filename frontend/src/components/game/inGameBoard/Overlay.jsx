@@ -10,7 +10,7 @@ export const Overlay = ({ color }) => {
                 height: '100%',
                 width: '100%',
                 zIndex: 1,
-                opacity: 0.5,
+                opacity: 0.7,
                 backgroundColor: color,
             }}
         />
