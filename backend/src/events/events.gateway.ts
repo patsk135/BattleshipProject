@@ -31,8 +31,8 @@ export class EventsGateway {
 
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    console.log('Before');
-    console.log(ROOMS);
+    // console.log('Before');
+    // console.log(ROOMS);
     ROOMS.splice(
       ROOMS.findIndex(room => {
         if (room.player1 === client.id || room.player2 === client.id) {
@@ -43,8 +43,8 @@ export class EventsGateway {
       }),
       1
     );
-    console.log('After');
-    console.log(ROOMS);
+    // console.log('After');
+    // console.log(ROOMS);
 
     delete this.boardsService.boards[client.id];
 
@@ -194,11 +194,15 @@ export class EventsGateway {
     const user = this.usersService.users[client.id];
     const opp = this.usersService.users[oppId];
     if (opp.status === Status.ONLINE) {
+      // console.log('Before');
+      // console.log(ROOMS);
       const room: Room = {
         player1: client.id,
         player2: oppId,
       };
       ROOMS.push(room);
+      // console.log('Before');
+      // console.log(ROOMS);
 
       const updatedOpp = {
         ...opp,
@@ -241,14 +245,17 @@ export class EventsGateway {
   @SubscribeMessage('createBoard')
   async createBoard(client: Socket, shipPlacement: number[]) {
     this.logger.log(`Event: CreateBoard`);
-    const board = await this.boardsService.placeShips(shipPlacement, client.id);
+    const board = this.boardsService.boards[client.id];
+    board.status.shipPlacement = shipPlacement;
+    board.status.attackStatus = new Array(64).fill(0);
+
     const user = this.usersService.users[client.id];
     const opp = this.usersService.users[user.oppId];
 
     user.ready = true;
 
     if (user.ready && opp.ready) {
-      console.log('in BothReady');
+      // console.log('in BothReady');
       const payload = {
         yourBoard: board,
         oppBoard: this.boardsService.boards[opp.id],
@@ -330,10 +337,7 @@ export class EventsGateway {
     const user = this.usersService.users[client.id];
     const opp = this.usersService.users[user.oppId];
     user.score = user.score + 1;
-    if (user.score === 2) {
-      delete this.boardsService.boards[client.id];
-      delete this.boardsService.boards[opp.id];
-
+    if (user.score === 1) {
       const mmrDiff = user.score - opp.score;
 
       const updatedUser = {
@@ -367,6 +371,8 @@ export class EventsGateway {
       };
       this.server.emit('refreshOnlineUsers', payload);
 
+      // console.log('Before');
+      // console.log(ROOMS);
       ROOMS.splice(
         ROOMS.findIndex(room => {
           if (
@@ -380,9 +386,12 @@ export class EventsGateway {
         }),
         1
       );
+      // console.log('After');
+      // console.log(ROOMS);
     } else {
       user.ready = false;
       opp.ready = false;
+
       client.emit('nextRound', 'win');
       client.broadcast.to(opp.id).emit('nextRound', 'lose');
     }
