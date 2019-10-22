@@ -43,6 +43,10 @@
     flex-grow: 1;
 }
 
+.buttons button {
+    padding: 0 1.5rem;
+}
+
 .acceptBt {
     font-style: normal;
     font-weight: 300;
