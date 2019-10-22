@@ -7,8 +7,8 @@ import { Server, Socket } from 'socket.io';
 import { UsersService } from './services/users.service';
 import { BoardsService } from './services/boards.service';
 import { Logger } from '@nestjs/common';
-import { MsgToServer } from 'src/interfaces/events.gateway.interface';
-import { Status, User } from 'src/interfaces/users.interface';
+import { MsgToServer } from '../interfaces/events.gateway.interface';
+import { Status, User } from '../interfaces/users.interface';
 
 @WebSocketGateway()
 export class EventsGateway {
@@ -24,10 +24,35 @@ export class EventsGateway {
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
+    client.emit('onConnection');
   }
 
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
+    if (
+      this.usersService.users[client.id] !== undefined &&
+      this.usersService.users[client.id].oppId !== ''
+    ) {
+      const oppId = this.usersService.users[client.id].oppId;
+      if (this.usersService.users[oppId].status === Status.INGAME) {
+        const updatedUser: User = {
+          ...this.usersService.users[oppId],
+          oppId: '',
+          status: Status.ONLINE,
+          ready: false,
+          score: 0,
+          yourTurn: false,
+        };
+        updatedUser.mmr = updatedUser.mmr + 1;
+        this.usersService.updateUser(updatedUser);
+        // const payload = {
+        //   event: 'Handle Disconnection',
+        //   user: updatedUser,
+        // };
+        // client.broadcast.to(oppId).emit('returnUpdatedUser', payload);
+        client.broadcast.to(oppId).emit('finishGame', 'oppDisconnect');
+      }
+    }
     const users = await this.usersService.deleteUser(client.id);
     const payload = {
       event: this.handleDisconnect.name,
@@ -62,6 +87,7 @@ export class EventsGateway {
       };
       client.emit('returnUpdatedUser', payload2);
       await this.boardsService.initBoard(client.id);
+      return false;
     } catch (err) {
       return { message: err.message };
     }
@@ -274,19 +300,36 @@ export class EventsGateway {
     };
     client.emit('returnUpdatedUser', payload1);
     client.broadcast.to(oppId).emit('returnUpdatedUser', payload2);
-    const board = await this.boardsService.isAttacked(index, oppId);
-    client.broadcast.to(oppId).emit('updateYourBoard', {
-      event: 'AttackBoard',
-      yourBoard: board,
-    });
-    return board;
+    if (index === -1) {
+      const board = this.boardsService.boards[oppId];
+      client.broadcast.to(oppId).emit('updateYourBoard', {
+        event: 'AttackBoard',
+        yourBoard: board,
+      });
+      return board;
+    } else {
+      const board = await this.boardsService.isAttacked(index, oppId);
+      client.broadcast.to(oppId).emit('updateYourBoard', {
+        event: 'AttackBoard',
+        yourBoard: board,
+      });
+      return board;
+    }
   }
 
   @SubscribeMessage('winThisRound')
   async transitionToNextRound(client: Socket, index: number) {
     this.logger.log(`Event: WinThisRound`);
-    if (this.usersService.users[client.id].score + 1 === 3) {
-      this.usersService.users[client.id].mmr += 1;
+    this.usersService.users[client.id].score =
+      this.usersService.users[client.id].score + 1;
+    if (this.usersService.users[client.id].score === 3) {
+      const mmrDiff =
+        this.usersService.users[client.id].score -
+        this.usersService.users[this.usersService.users[client.id].oppId].score;
+      this.usersService.users[client.id].mmr += mmrDiff;
+      this.usersService.users[
+        this.usersService.users[client.id].oppId
+      ].mmr -= mmrDiff;
       this.usersService.users[client.id].status = Status.ONLINE;
       this.usersService.users[client.id].yourTurn = false;
       this.usersService.users[client.id].score = 0;

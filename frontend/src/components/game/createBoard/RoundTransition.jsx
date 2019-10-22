@@ -11,9 +11,11 @@ export const RoundTransition = ({ user, msg, openCreateBoard, closeTransition })
             <div id='tt'>
                 You {msg}. Your score is {user.score}!{' '}
             </div>
-            <button id='nextRound' onClick={onClickHandler}>
-                Next Round.
-            </button>
+            <div>
+                <button id='nextRound' onClick={onClickHandler}>
+                    Next Round.
+                </button>
+            </div>
         </div>
     );
 };

@@ -6,6 +6,25 @@ import '../../css/InGameWindow.css';
 export const InGameWindow = ({ user }) => {
     const [yourBoard, setYourBoard] = useState(null);
     const [oppBoard, setOppBoard] = useState(null);
+    const [timer, setTimer] = useState(10);
+
+    useEffect(() => {
+        socket.on('updateYourBoard', payload => {
+            console.log('in updateBoard');
+            setYourBoard(payload.yourBoard.status);
+            setTimer(10);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (timer === 0) {
+            socket.emit('attackBoard', -1);
+        }
+        const intervalId = setInterval(() => {
+            setTimer(timer - 1);
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, [timer]);
 
     useEffect(() => {
         socket.on('receiveFetchBoard', payload => {
@@ -14,32 +33,32 @@ export const InGameWindow = ({ user }) => {
             setYourBoard(payload.yourBoard.status);
             setOppBoard(payload.oppBoard.status);
         });
-        socket.on('updateYourBoard', payload => {
-            console.log('in updateBoard');
-            setYourBoard(payload.yourBoard.status);
-        });
-    }, []);
+    }, [user]);
 
     return (
-        <div className={`boards ${!user.yourTurn && 'avoid-clicks'}`}>
-            <div>
-                Your Board{<InGameBoard boardStatus={yourBoard} isOwner={true}></InGameBoard>}
+        <>
+            {user.yourTurn && <div>Timer: {timer}</div>}
+            {!user.yourTurn && <div>Waiting</div>}
+            <div className={`boards ${!user.yourTurn && 'avoid-clicks'}`}>
+                <div>
+                    Your Board{<InGameBoard boardStatus={yourBoard} isOwner={true}></InGameBoard>}
+                </div>
+                <div
+                    style={{
+                        width: '15px',
+                    }}
+                ></div>
+                <div>
+                    Opponent Board
+                    {
+                        <InGameBoard
+                            boardStatus={oppBoard}
+                            isOwner={false}
+                            setOppBoard={setOppBoard}
+                        ></InGameBoard>
+                    }
+                </div>
             </div>
-            <div
-                style={{
-                    width: '15px',
-                }}
-            ></div>
-            <div>
-                Opponent Board
-                {
-                    <InGameBoard
-                        boardStatus={oppBoard}
-                        isOwner={false}
-                        setOppBoard={setOppBoard}
-                    ></InGameBoard>
-                }
-            </div>
-        </div>
+        </>
     );
 };

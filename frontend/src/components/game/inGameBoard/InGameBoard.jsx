@@ -24,8 +24,8 @@ export const InGameBoard = ({ boardStatus, isOwner, setOppBoard }) => {
     };
 
     const renderSquare = i => {
-        const x = i % 8;
-        const y = Math.floor(i / 8);
+        // const x = i % 8;
+        // const y = Math.floor(i / 8);
 
         return (
             <div

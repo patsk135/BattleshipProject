@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BOARDS } from '../../mocks/boards.mocks';
-import { Coordinate } from 'src/interfaces/events.gateway.interface';
-import { Boards, Board } from 'src/interfaces/boards.interface';
+import { Boards, Board } from '../../interfaces/boards.interface';
 
 @Injectable()
 export class BoardsService {

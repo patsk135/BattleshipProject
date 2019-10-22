@@ -10,7 +10,6 @@ import { MyStatusBox } from './components/MyStatusBox';
 import { LobbyChat } from './components/LobbyChat';
 import { AdminPage } from './components/AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
-import { InGameBoard } from './components/game/inGameBoard/InGameBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
@@ -23,16 +22,18 @@ function App() {
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
+    const openShowLogin = () => setShowLogin(true);
 
     const [showInviteWindow, setShowInviteWindow] = useState(false);
     const closeInviteWindow = () => setShowInviteWindow(false);
 
     const [showCreateBoard, setShowCreateBoard] = useState(false);
     const openCreateBoard = () => setShowCreateBoard(true);
+    const closeCreateBoard = () => setShowCreateBoard(false);
 
     const [showInGameWindow, setShowInGameWindow] = useState(false);
     const openInGameWindow = () => {
-        setShowCreateBoard(false);
+        closeCreateBoard();
         setShowInGameWindow(true);
     };
     const closeInGameWindow = () => setShowInGameWindow(false);
@@ -52,6 +53,15 @@ function App() {
             socket.emit('pingToServer', 'Ping!');
         }, 20000);
         //////////////////////////////////////////////////////
+
+        socket.on('onConnection', () => {
+            closeCreateBoard();
+            closeInGameWindow();
+            closeInviteWindow();
+            closeTransition();
+            closeShowEndGameModal();
+            openShowLogin();
+        });
 
         socket.on('returnUpdatedUser', payload => {
             console.log('ReturnUpdatedUser: ');
@@ -104,9 +114,14 @@ function App() {
 
         socket.on('finishGame', msg => {
             socket.emit('fetchUser');
+            closeCreateBoard();
             closeInGameWindow();
             setShowEndGameModal(true);
-            setTmp_msg(msg);
+            if (msg === 'oppDisconnect') {
+                setTmp_msg(`Your opponent disconnect. Your MMR +1.`);
+            } else {
+                setTmp_msg(`You ${msg} this game.`);
+            }
         });
     }, []);
 
