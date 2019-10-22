@@ -141,7 +141,7 @@ function App() {
                             <header className='App-header'>
                                 {/* <div>{Object.values(users)}</div> */}
                                 {/* {<div>{<MyStatusBox user={user} />}</div>} */}
-                                {<div>{<UserStatusBar user={user} />}</div>}
+                                {!showLogin && <UserStatusBar user={user} />}
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}
