@@ -22,7 +22,9 @@
 }
 
 .submit {
+    height: 2.5rem;
     margin-top: 16px;
+    padding: 0 1.5rem;
 }
 
 .input {
