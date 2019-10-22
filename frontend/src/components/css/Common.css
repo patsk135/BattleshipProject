@@ -1,0 +1,28 @@
+html * {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    border-radius: 8px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+}
+
+.primaryButton {
+    background: rgba(0, 83, 119, 0.9);
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.secondaryButton {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 83, 119, 0.7);
+    font-size: 16px;
+    color: #005377;
+}
