@@ -4,6 +4,7 @@
     align-content: center;
 
     position: absolute;
+   
 }
 
 .containerBoard div {
@@ -12,6 +13,7 @@
     width: 50vh;
     display: flex;
     flex-wrap: wrap;
+
 }
 
 #placeShip {
