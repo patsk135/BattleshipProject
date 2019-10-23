@@ -8,14 +8,25 @@ export const AdminPage = () => {
     const [rooms, setRooms] = useState([]);
     const [numberOfRooms, setNumberOfRooms] = useState(0);
     //let number = users.size();
+
+    const handleOnclick = room => {
+        socket.emit('resetRoom', room);
+    };
+
     useEffect(() => {
         socket.emit('fetchUsers');
         socket.emit('fetchRooms');
+        socket.emit('addAdmin');
+        socket.on('onConnection', () => {
+            socket.emit('fetchUsers');
+            socket.emit('fetchRooms');
+        });
         socket.on('refreshOnlineUsers', payload => {
             setUsers(payload.users);
         });
         socket.on('refreshRooms', payload => {
             console.log('inh fetch room');
+            console.log(payload);
             setRooms(payload.rooms);
         });
     }, []);
@@ -77,7 +88,9 @@ export const AdminPage = () => {
                             <li>{eachRoom.player1}</li>
                             <li>{eachRoom.player2}</li>
                             <li>
-                                <button className='resetBtn'>reset</button>
+                                <button className='resetBtn' onClick={e => handleOnclick(eachRoom)}>
+                                    reset
+                                </button>
                             </li>
                         </ul>
                     ))}

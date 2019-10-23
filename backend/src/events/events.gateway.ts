@@ -96,6 +96,11 @@ export class EventsGateway {
     this.server.emit('refreshOnlineUsers', payload);
   }
 
+  @SubscribeMessage('addAdmin')
+  async addAdmin(client: Socket, data: any) {
+    admin.push(client.id);
+  }
+
   @SubscribeMessage('fetchUsers')
   async fetchUsers(client: Socket, data: any) {
     const payload = {
@@ -107,8 +112,7 @@ export class EventsGateway {
 
   @SubscribeMessage('fetchRooms')
   async fetchRooms(client: Socket, data: any) {
-    // console.log('fetchRoom');
-    admin.push(client.id);
+    this.logger.log('Event: FetchRooms');
     // console.log(admin);
 
     const payload = {
@@ -117,6 +121,63 @@ export class EventsGateway {
     };
     // console.log(payload);
     client.emit('refreshRooms', payload);
+  }
+
+  @SubscribeMessage('resetRoom')
+  async resetRoom(client: Socket, room: Room) {
+    this.logger.log('Event: ResetRoom');
+    // console.log(room);
+
+    const user1 = this.usersService.users[room.player1];
+    const user2 = this.usersService.users[room.player2];
+
+    const updatedUser1 = {
+      ...user1,
+      status: Status.ONLINE,
+      oppId: '',
+      ready: false,
+      score: 0,
+      yourTurn: false,
+    };
+    this.usersService.updateUser(updatedUser1);
+
+    const updatedUser2 = {
+      ...user2,
+      status: Status.ONLINE,
+      oppId: '',
+      ready: false,
+      score: 0,
+      yourTurn: false,
+    };
+    this.usersService.updateUser(updatedUser2);
+
+    client.broadcast.to(room.player1).emit('backToLobby');
+    client.broadcast.to(room.player2).emit('backToLobby');
+
+    // console.log(ROOMS);
+    const index = ROOMS.findIndex(
+      eachRoom =>
+        eachRoom.player1 === room.player1 || eachRoom.player2 === room.player1
+    );
+    if (index !== -1) {
+      ROOMS.splice(index, 1);
+    }
+    // console.log(index);
+    // console.log(ROOMS);
+
+    const adminPayload = {
+      event: 'ResetRoom',
+      rooms: ROOMS,
+    };
+    admin.map(id => {
+      // console.log('in map emit refreshRooms');
+      // console.log(id);
+      if (id === client.id) {
+        client.emit('refreshRooms', adminPayload);
+      } else {
+        client.broadcast.to(id).emit('refreshRooms', adminPayload);
+      }
+    });
   }
 
   @SubscribeMessage('createUser')

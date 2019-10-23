@@ -5,8 +5,6 @@ import { socket } from './socket';
 
 import { LoginModal } from './components/LoginModal';
 import { InviteWindow } from './components/InviteWindow';
-// import { MyStatusBox } from './components/MyStatusBox';
-import { LobbyChat } from './components/LobbyChat';
 import { AdminPage } from './AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
@@ -62,6 +60,8 @@ function App() {
             closeTransition();
             closeShowEndGameModal();
             openShowLogin();
+            socket.emit('fetchUser');
+            socket.emit('fetchUsers');
         });
 
         socket.on('returnUpdatedUser', payload => {
@@ -80,6 +80,18 @@ function App() {
 
         socket.on('msgToClients', payload => {
             setMessages(oldmsg => [...oldmsg, payload.message]);
+        });
+
+        socket.on('backToLobby', payload => {
+            console.log('BackToLobby');
+            closeCreateBoard();
+            closeInGameWindow();
+            closeInviteWindow();
+            closeTransition();
+            closeShowEndGameModal();
+            closeShowLogin();
+            socket.emit('fetchUser');
+            socket.emit('fetchUsers');
         });
 
         socket.on('getInvitation', ({ event, clientId }) => {
