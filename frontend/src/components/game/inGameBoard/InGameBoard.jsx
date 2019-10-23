@@ -6,8 +6,11 @@ export const InGameBoard = ({ name, boardStatus, hit, isOwner, setOppBoard, incr
     const [squares, setSquares] = useState([]);
     const [score, setScore] = useState(0);
 
+    const fireCannon = new Audio('/fireCannon.mp3');
+
     const handleSquareClick = i => {
         if (!isOwner && boardStatus.attackStatus[i] !== 1) {
+            fireCannon.play();
             // console.log(`Attack position x:${x} y:${y}`);
             const { shipPlacement, attackStatus } = boardStatus;
             if (shipPlacement[i] === 1) {
@@ -61,7 +64,7 @@ export const InGameBoard = ({ name, boardStatus, hit, isOwner, setOppBoard, incr
         if (score === 4) {
             setScore(0);
             // console.log('You win.');
-            socket.emit('winThisRound');
+            setTimeout(() => socket.emit('winThisRound'), 1000);
         }
     }, [boardStatus]);
 
