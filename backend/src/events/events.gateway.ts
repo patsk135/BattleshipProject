@@ -27,6 +27,7 @@ export class EventsGateway {
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
     client.emit('onConnection');
+
     setInterval(() => {
       client.emit('1sec');
     }, 1000);

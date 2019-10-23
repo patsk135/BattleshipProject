@@ -43,16 +43,12 @@ export const InGameWindow = ({ user, users, timer, setTimer }) => {
         if (timer === 0) {
             socket.emit('attackBoard', -1);
         }
-        const intervalId = setInterval(() => {
-            setTimer(timer - 1);
-        }, 1000);
-        return () => clearInterval(intervalId);
     }, [timer]);
 
-    useEffect(() => {}, []);
+    // useEffect(() => {}, []);
 
     return (
-        <div>
+        <div style={{ position: 'absolute' }}>
             {user.yourTurn && <div>Timer: {timer}</div>}
             {!user.yourTurn && <div>Waiting</div>}
             <div className={`boards ${!user.yourTurn && 'avoid-clicks'}`}>
