@@ -3,13 +3,12 @@ import { socket } from '../../../socket';
 import { InGameBoard } from './InGameBoard';
 import '../../css/InGameWindow.css';
 
-export const InGameWindow = ({ user, users }) => {
+export const InGameWindow = ({ user, users, timer, setTimer }) => {
     const [start, setStart] = useState(false);
     const [yourBoard, setYourBoard] = useState(null);
     const [oppBoard, setOppBoard] = useState(null);
     const [oppScore, setOppScore] = useState(0);
     const [yourScore, setYourScore] = useState(0);
-    const [timer, setTimer] = useState(10);
 
     const increaseYourHit = () => {
         setYourScore(yourScore + 1);
@@ -17,8 +16,8 @@ export const InGameWindow = ({ user, users }) => {
 
     useEffect(() => {
         socket.on('receiveFetchBoard', payload => {
-            console.log('in fetchBoard');
-            console.log(payload);
+            // console.log('in fetchBoard');
+            // console.log(payload);
             setYourBoard(payload.yourBoard.status);
             setOppBoard(payload.oppBoard.status);
             setTimer(10);
@@ -28,14 +27,14 @@ export const InGameWindow = ({ user, users }) => {
         });
 
         socket.on('updateYourBoard', payload => {
-            console.log('in updateBoard');
+            // console.log('in updateBoard');
             // console.log(payload);
             setYourBoard(payload.yourBoard.status);
             setTimer(10);
         });
 
         socket.on('increaseOppHit', () => {
-            console.log('in increaseOppHit');
+            // console.log('in increaseOppHit');
             setOppScore(oppScore => oppScore + 1);
         });
     }, []);

@@ -144,9 +144,7 @@ export const CreateBoard = () => {
         <>
             <div className='containerBoard'>
                 <div>{renderSquare()}</div>
-            </div>
-
-            {numberOfShips !== 4 && (
+                {numberOfShips !== 4 && (
                 <button id='placeShip' onClick={placeAShip}>
                     Place Ship
                 </button>
@@ -156,6 +154,7 @@ export const CreateBoard = () => {
                     Ready
                 </button>
             )}
+            </div>
         </>
     );
 };

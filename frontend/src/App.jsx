@@ -4,16 +4,12 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { socket } from './socket';
 
 import { LoginModal } from './components/LoginModal';
-import { OnlinePlayersTab } from './components/OnlinePlayersTab';
 import { InviteWindow } from './components/InviteWindow';
-// import { MyStatusBox } from './components/MyStatusBox';
-import { LobbyChat } from './components/LobbyChat';
 import { AdminPage } from './components/AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
-import { UserStatusBar } from './components/UserStatusBar';
 import { Lobby } from './components/Lobby';
 
 function App() {
@@ -21,6 +17,7 @@ function App() {
     const [users, setUsers] = useState({});
     const [messages, setMessages] = useState([]);
     const [tmp_msg, setTmp_msg] = useState('');
+    const [timer, setTimer] = useState(0);
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
@@ -47,13 +44,13 @@ function App() {
     const closeShowEndGameModal = () => setShowEndGameModal(false);
 
     useEffect(() => {
-        // Ping ///////////////////////////////////////////////
-        socket.on('pingToClient', payload => {
-            // console.log(payload);
+        socket.on('1sec', () => {
+            setTimer(time => time - 1);
         });
+        // Ping ///////////////////////////////////////////////
         setInterval(() => {
             socket.emit('pingToServer', 'Ping!');
-        }, 20000);
+        }, 15000);
         //////////////////////////////////////////////////////
 
         socket.on('onConnection', () => {
@@ -140,12 +137,13 @@ function App() {
                     <Route path='/'>
                         <div className='App'>
                             <header className='App-header'>
+                                {/* {timer} */}
                                 {/* {<div>{<MyStatusBox user={user} />}</div>} */}
-                                {
-                                  showLogin
-                                    ? <LoginModal close={closeShowLogin} />
-                                    : <Lobby user={user} users={users} messages={messages} />
-                                }
+                                {showLogin ? (
+                                    <LoginModal close={closeShowLogin} />
+                                ) : (
+                                    <Lobby user={user} users={users} messages={messages} />
+                                )}
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}
@@ -167,7 +165,8 @@ function App() {
                                     <InGameWindow
                                         user={user}
                                         users={users}
-                                        close={closeInGameWindow}
+                                        timer={timer}
+                                        setTimer={setTimer}
                                     ></InGameWindow>
                                 )}
                                 {showInviteWindow && (

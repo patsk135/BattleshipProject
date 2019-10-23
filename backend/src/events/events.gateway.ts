@@ -27,6 +27,9 @@ export class EventsGateway {
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
     client.emit('onConnection');
+    setInterval(() => {
+      client.emit('1sec');
+    }, 1000);
   }
 
   async handleDisconnect(client: Socket) {
@@ -147,9 +150,13 @@ export class EventsGateway {
       event: this.ping.name,
       msg,
     };
-    client.emit('pingToClient', payload);
+    client.emit('emit', payload);
   }
 
+  // @SubscribeMessage('retrieveTime')
+  // emitTime(client: Socket, data: any) {
+  //   client.emit('emitTime');
+  // }
   /////////////////////////////////////////////////////////////////
 
   RUU = 'returnUpdatedUser';
