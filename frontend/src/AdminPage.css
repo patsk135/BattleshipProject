@@ -1,0 +1,143 @@
+.adminPageHeader {
+    text-align: center;
+    background-color: aquamarine;
+}
+
+.adminPageHeader li {
+    text-align: center;
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-top: 30px;
+  }
+
+.adminPagePlayers {
+    margin-top: 20px
+}
+
+.boardPlayer {
+    background: skyblue;
+    padding: 1vh;
+    margin: 1vh;
+}
+
+.navPlayer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: gray;
+    margin-bottom: -2%;
+    list-style-type: none;
+    text-align: center;
+    margin: 1vh;
+}
+
+.navPlayer li:nth-child(odd) {
+    background-color: lightgrey;
+    color: black;
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.cardPlayer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: white;
+    margin: 1vh;
+}
+
+.cardPlayer ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+    background-color: chartreuse;
+    margin: 10px;
+    font-size: 30px;
+    justify-content: space-evenly;
+}
+  
+.cardPlayer ul li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.cardPlayer ul li:nth-child(odd) {
+    background: lightgreen;
+}
+
+
+
+.boardGame {
+    background: orange;
+    padding: 1vh;
+    margin: 1vh;
+}
+
+.navGame {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr 2fr 1fr;
+    background-color: gray;
+    margin-bottom: -2%;
+    list-style-type: none;
+    text-align: center;
+    margin: 1vh;
+}
+
+.navGame li:nth-child(odd) {
+    color: black;
+    background: lightgray;
+    display: inline-block;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    padding-left: 10%;
+    padding-right: 20px;
+}
+
+.cardGame {
+    background-color: white;
+    margin: 1vh;
+}
+
+.cardGame ul {
+    background-color: white;
+    font-size: 30px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 2fr 2fr 1fr;
+    text-align: center;
+    justify-content: space-evenly;
+}
+
+.cardGame ul li {
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.cardGame ul li:nth-child(odd) {
+    background: #eeeeee;
+}
+
+.resetBtn {
+    color: white;
+    background: blueviolet;
+}
+  

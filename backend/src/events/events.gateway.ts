@@ -78,6 +78,15 @@ export class EventsGateway {
     this.server.emit('refreshOnlineUsers', payload);
   }
 
+  @SubscribeMessage('fetchUsers')
+  async fetchUsers(client: Socket, data: any) {
+    const payload = {
+      event: 'FetchUsers',
+      users: this.usersService.users
+    };
+    client.emit('refreshOnlineUsers', payload);
+  }
+
   @SubscribeMessage('createUser')
   async createUser(client: Socket, name: string) {
     this.logger.log(`Event: CreateUser => Name: ${name}`);

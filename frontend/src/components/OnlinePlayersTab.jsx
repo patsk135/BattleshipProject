@@ -3,6 +3,7 @@ import './css/OnlinePlayersTab.css';
 import { socket } from '../socket';
 
 export const OnlinePlayersTab = ({ user, users }) => {
+    
     const onClick = oppId => {
         console.log('Before sendInvitation');
         console.log(oppId);

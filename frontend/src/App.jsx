@@ -5,7 +5,9 @@ import { socket } from './socket';
 
 import { LoginModal } from './components/LoginModal';
 import { InviteWindow } from './components/InviteWindow';
-import { AdminPage } from './components/AdminPage';
+// import { MyStatusBox } from './components/MyStatusBox';
+import { LobbyChat } from './components/LobbyChat';
+import { AdminPage } from './AdminPage';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
