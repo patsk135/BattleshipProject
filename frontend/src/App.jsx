@@ -11,6 +11,7 @@ import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
 import { Lobby } from './components/Lobby';
+import { ShowGameMessage } from './components/ShowGameMessage';
 
 function App() {
     const [user, setUser] = useState({});
@@ -18,6 +19,8 @@ function App() {
     const [messages, setMessages] = useState([]);
     const [tmp_msg, setTmp_msg] = useState('');
     const [timer, setTimer] = useState(0);
+
+    const [gameMessage, setGameMessage] = useState(''); 
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
@@ -130,11 +133,11 @@ function App() {
             socket.emit('fetchUser');
             closeCreateBoard();
             closeInGameWindow();
-            setShowEndGameModal(true);
+            // setShowEndGameModal(true);
             if (msg === 'oppDisconnect') {
-                setTmp_msg(`Your opponent disconnect. Your MMR +1.`);
+                setGameMessage(`Your opponent disconnect. Your MMR +1. Now your MMR is ${user.mmr}.`);
             } else {
-                setTmp_msg(`You ${msg} this game.`);
+                setGameMessage(`You ${msg} this game. Now your MMR is ${user.mmr}`);
             }
         });
     }, []);
@@ -152,13 +155,12 @@ function App() {
                     <Route path='/'>
                         <div className='App'>
                             <header className='App-header'>
-                                {/* {timer} */}
-                                {/* {<div>{<MyStatusBox user={user} />}</div>} */}
-                                {showLogin ? (
-                                    <LoginModal close={closeShowLogin} />
-                                ) : (
-                                    <Lobby user={user} users={users} messages={messages} />
-                                )}
+                                <div className='messageBox'><ShowGameMessage gameMessage={gameMessage}></ShowGameMessage></div>
+                                {
+                                  showLogin
+                                    ? <LoginModal close={closeShowLogin} />
+                                    : <Lobby user={user} users={users} messages={messages} />
+                                }
                                 {showEndGameModal && (
                                     <EndGameModal
                                         user={user}
@@ -175,7 +177,7 @@ function App() {
                                     ></RoundTransition>
                                 )}
                                 {}
-                                {showCreateBoard && <CreateBoard user={user}></CreateBoard>}
+                                {showCreateBoard && <CreateBoard user={user} setGameMessage={setGameMessage}></CreateBoard>}
                                 {showInGameWindow && (
                                     <InGameWindow
                                         user={user}

@@ -2,8 +2,8 @@
     display: flex;
     position: absolute;
     width: 30%;
-    height: 25%;
-    padding-top: 3%;
+    height: 15%;
+    padding-top: 2vmin;
     /* align-self: center; */
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
@@ -11,8 +11,9 @@
 }
 
 .inviteWindow label {
-    padding-top: 3%;
-    padding-bottom: 5%;
+    /* padding-top: 1%; */
+    padding-inline-start: 3%;
+    padding-inline-end: 3%;
     display: inline-block;
     font-family: Nunito;
     font-style: normal;

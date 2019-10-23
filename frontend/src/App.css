@@ -31,8 +31,6 @@
 }
 
 .border {
-    width: 562px;
-    height: 288px;
     background: #ffffff;
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
@@ -42,10 +40,14 @@
     display: inline-flex;
 }
 
-.avt img {
-    height: 70px;
-    width: 70px;
-    margin: 1rem;
-    /* border-radius: 50%; */
-    text-align: center;
+.messageBox{
+    background: #49ba9c;
+    margin-top: 3%;
+    height: 2%;
+    width: 56vw;
+    margin-bottom: 1%;
+
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    padding: 1%;
 }

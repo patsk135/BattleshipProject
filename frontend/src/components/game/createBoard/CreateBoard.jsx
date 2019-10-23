@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { socket } from '../../../socket';
 import './css/CreateBoard.css';
 
-export const CreateBoard = () => {
+export const CreateBoard = ({setGameMessage}) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
     const [ship, setShip] = useState([]);
     const [numberOfShips, setNumberOfShips] = useState(0);
@@ -16,11 +16,13 @@ export const CreateBoard = () => {
 
     const handleOnClick = index => {
         if (numberOfShips === 4) {
-            console.log('You are already have 4 ships!');
+            setGameMessage('You already have 4 ships!');
+            //console.log('You already have 4 ships!');
             return;
         }
         if (ship.length === 4) {
-            console.log('Ship size must be 4!');
+            setGameMessage('Ship size must be 4!');
+            //console.log('Ship size must be 4!');
         } else if (squares[index] === 1) {
             console.log('Already placed!');
         } else {
@@ -36,7 +38,8 @@ export const CreateBoard = () => {
 
     const placeAShip = () => {
         if (ship.length !== 4) {
-            console.log('Ship size must be 4!');
+            setGameMessage('Ship size must be 4!');
+            //console.log('Ship size must be 4!');
             const newBoard = squares.map(x => x);
             for (let i = 0; i < 4; i++) {
                 newBoard[ship[i]] = 0;
@@ -96,10 +99,12 @@ export const CreateBoard = () => {
             setNumberOfShips(numberOfShips + 1);
         } else {
             if (numberOfShips === 4) {
-                console.log('You already have 4 ships!');
-                console.log('Please Click Ready!');
+                setGameMessage('You already have 4 ships! Please click Ready!');
+                //console.log('You already have 4 ships!');
+                //console.log('Please Click Ready!');
             } else {
-                console.log('Ship must be 4 consecutive blocks');
+                setGameMessage('Ship must be 4 consecutive blocks');
+                //console.log('Ship must be 4 consecutive blocks');
                 // console.log(ship);
             }
             const newBoard = squares.map(x => x);
