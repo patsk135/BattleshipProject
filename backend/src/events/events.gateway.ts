@@ -10,7 +10,7 @@ import { Logger } from '@nestjs/common';
 import { MsgToServer, Room } from '../interfaces/common.interface';
 import { Status, User } from '../interfaces/users.interface';
 
-import { ROOMS, i } from '../mocks/rooms.mocks';
+import { ROOMS, admin } from '../mocks/rooms.mocks';
 
 @WebSocketGateway()
 export class EventsGateway {
@@ -37,16 +37,34 @@ export class EventsGateway {
     this.logger.log(`Client disconnected: ${client.id}`);
     // console.log('Before');
     // console.log(ROOMS);
-    ROOMS.splice(
-      ROOMS.findIndex(room => {
-        if (room.player1 === client.id || room.player2 === client.id) {
-          return false;
-        } else {
-          return true;
-        }
-      }),
-      1
+    // console.log('admin');
+    // console.log(admin);
+
+    const adminIndex = admin.findIndex(id => id === client.id);
+    if (adminIndex !== -1) {
+      admin.splice(adminIndex, 1);
+    }
+    // console.log(admin);
+
+    const index = ROOMS.findIndex(
+      room => room.player1 === client.id || room.player2 === client.id
     );
+    if (index !== -1) {
+      ROOMS.splice(index, 1);
+    }
+
+    const adminPayload = {
+      event: 'HandleDisconnect',
+      rooms: ROOMS,
+    };
+    // console.log(admin);
+    admin.map(id => {
+      // console.log('map refersh room');
+      // console.log(admin);
+      // console.log(id);
+      client.broadcast.to(id).emit('refreshRooms', adminPayload);
+    });
+
     // console.log('After');
     // console.log(ROOMS);
 
@@ -82,9 +100,23 @@ export class EventsGateway {
   async fetchUsers(client: Socket, data: any) {
     const payload = {
       event: 'FetchUsers',
-      users: this.usersService.users
+      users: this.usersService.users,
     };
     client.emit('refreshOnlineUsers', payload);
+  }
+
+  @SubscribeMessage('fetchRooms')
+  async fetchRooms(client: Socket, data: any) {
+    // console.log('fetchRoom');
+    admin.push(client.id);
+    // console.log(admin);
+
+    const payload = {
+      event: 'FetchRooms',
+      rooms: ROOMS,
+    };
+    // console.log(payload);
+    client.emit('refreshRooms', payload);
   }
 
   @SubscribeMessage('createUser')
@@ -218,6 +250,14 @@ export class EventsGateway {
         player2: oppId,
       };
       ROOMS.push(room);
+
+      const adminPayload = {
+        event: 'HandleDisconnect',
+        rooms: ROOMS,
+      };
+      admin.map(id => {
+        client.broadcast.to(id).emit('refreshRooms', adminPayload);
+      });
       // console.log('Before');
       // console.log(ROOMS);
 
@@ -390,19 +430,23 @@ export class EventsGateway {
 
       // console.log('Before');
       // console.log(ROOMS);
-      ROOMS.splice(
-        ROOMS.findIndex(room => {
-          if (
-            room.player1 === client.id ||
-            room.player1 === this.usersService.users[client.id].oppId
-          ) {
-            return false;
-          } else {
-            return true;
-          }
-        }),
-        1
+
+      const index = ROOMS.findIndex(
+        room =>
+          room.player1 === client.id ||
+          room.player1 === this.usersService.users[client.id].oppId
       );
+      if (index !== -1) {
+        ROOMS.splice(index, 1);
+      }
+
+      const adminPayload = {
+        event: 'HandleDisconnect',
+        rooms: ROOMS,
+      };
+      admin.map(id => {
+        client.broadcast.to(id).emit('refreshRooms', adminPayload);
+      });
       // console.log('After');
       // console.log(ROOMS);
     } else {

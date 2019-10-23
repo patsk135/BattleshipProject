@@ -1,84 +1,88 @@
-import React, {useState, useEffect} from 'react';
-import "./AdminPage.css";
+import React, { useState, useEffect } from 'react';
+import './AdminPage.css';
 import { socket } from './socket';
 
 export const AdminPage = () => {
-  
-  const [users, setUsers] = useState({})
-  useEffect(()=> {
-    socket.emit('fetchUsers')
-    socket.on('refreshOnlineUsers', payload => {
-      setUsers(payload.users)
-    })
-  },[])
+    const [users, setUsers] = useState({});
+    const [numberOfUsers, setNumberOfUsers] = useState(0);
+    const [rooms, setRooms] = useState([]);
+    const [numberOfRooms, setNumberOfRooms] = useState(0);
+    //let number = users.size();
+    useEffect(() => {
+        socket.emit('fetchUsers');
+        socket.emit('fetchRooms');
+        socket.on('refreshOnlineUsers', payload => {
+            setUsers(payload.users);
+        });
+        socket.on('refreshRooms', payload => {
+            console.log('inh fetch room');
+            setRooms(payload.rooms);
+        });
+    }, []);
 
-  return (
+    useEffect(() => {
+        setNumberOfUsers(Object.keys(users).length);
+    }, [users]);
 
-    <div>
+    useEffect(() => {
+        setNumberOfRooms(Object.keys(rooms).length);
+    }, [rooms]);
 
-      <div className="adminPageHeader">
-        <li>This is admin page</li>
-        <li>UserName:</li>
-        <li>ID:</li>
-        <li>Status: Admin</li>
-      </div>
-
-      <div className="adminPagePlayers">
-        <h1 align="center">Players in the server</h1>
-        <ul align="center">Number of players online: </ul>
-      </div>
-
-      <div className="boardPlayer">
-        <div className="navPlayer">
-          <li>Player Name</li>
-          <li>Status</li>
-          <li>MMR</li>
+    return (
+        <div>
+            <div className='adminPageHeader'>
+                <li>This is admin page</li>
+            </div>
+            <div className='adminPagePlayers'>
+                <h2 align='center'>PLAYERS IN THE SERVER</h2>
+                <ul align='center'>Number of players online: {numberOfUsers}</ul>
+            </div>
+            <div className='boardPlayer'>
+                <div className='navPlayer'>
+                    <li>Player Name</li>
+                    <li>Player ID</li>
+                    <li>OPP ID</li>
+                    <li>Status</li>
+                    <li>Ready</li>
+                    <li>MMR</li>
+                </div>
+                <div className='cardPlayer'>
+                    {Object.values(users).map(eachUser => (
+                        <ul>
+                            <li>{eachUser.name}</li>
+                            <li>{eachUser.id}</li>
+                            <li>{eachUser.oppId}</li>
+                            <li>{eachUser.status}</li>
+                            <li>{eachUser.ready}</li>
+                            <li>{eachUser.mmr}</li>
+                        </ul>
+                    ))}
+                </div>
+            </div>
+            <div className='adminPagePlayers'>
+                <h2 align='center'>GAMES IN THE SERVER</h2>
+                <ul align='center'>Number of games playing: {numberOfRooms}</ul>
+            </div>
+            <div className='boardGame'>
+                <div className='navGame'>
+                    <li>No.</li>
+                    <li>Player 1</li>
+                    <li>Player 2</li>
+                    <li>Reset</li>
+                </div>
+                <div className='cardGame'>
+                    {rooms.map((eachRoom, index) => (
+                        <ul key={index}>
+                            <li>{index + 1}</li>
+                            <li>{eachRoom.player1}</li>
+                            <li>{eachRoom.player2}</li>
+                            <li>
+                                <button className='resetBtn'>reset</button>
+                            </li>
+                        </ul>
+                    ))}
+                </div>
+            </div>
         </div>
-        <div className="cardPlayer">
-          {Object.values(users)
-              .filter(one => one.id)
-              .map(eachUser => (
-                <ul key={eachUser.id}>
-                  <li>{eachUser.name}</li>
-                  <li>{eachUser.status}</li>
-                  <li>{eachUser.mmr}</li>
-                </ul>
-            ))}
-        </div>
-      </div>
-
-      <div className="adminPagePlayers">
-        <h1 align="center">Games in the server</h1>
-        <ul align="center">Number of games playing: </ul>
-      </div>
-
-      <div className="boardGame">
-        <div className="navGame">
-          <li>No.</li>
-          <li>Player1</li>
-          <li>Player2</li>
-          <li>Game No.</li>
-          <li>Status</li>
-          <li>Reset</li>
-        </div>
-        <div className="cardGame">
-          {Object.values(users)
-            .filter(one => one.id)
-            .map(eachUser => (
-              <ul key={eachUser.id}>
-                <li>{eachUser.name}</li>
-                <li>{eachUser.status}</li>
-                <li>{eachUser.mmr}</li>
-                <li>{eachUser.name}</li>
-                <li>{eachUser.status}</li>
-                <li>{eachUser.mmr}</li>
-              </ul>
-          ))}
-        </div>
-      </div>
-
-    </div>
-    
-  );
-
+    );
 };
