@@ -2,6 +2,8 @@
 
 .App {
     text-align: center;
+    max-height: 100vh;
+    max-width: 100vw;
 }
 
 .App-logo {
@@ -15,7 +17,7 @@
             rgba(28, 181, 224, 0) 100%
         ),
         #000851;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

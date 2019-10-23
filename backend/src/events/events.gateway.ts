@@ -338,7 +338,7 @@ export class EventsGateway {
     const opp = this.usersService.users[user.oppId];
     user.score = user.score + 1;
     if (user.score === 1) {
-      const mmrDiff = user.score - opp.score;
+      const mmrDiff = Math.abs(user.score - opp.score);
 
       const updatedUser = {
         ...user,
@@ -355,7 +355,7 @@ export class EventsGateway {
         ...opp,
         status: Status.ONLINE,
         oppId: '',
-        mmr: user.mmr - mmrDiff,
+        mmr: opp.mmr - mmrDiff,
         ready: false,
         score: 0,
         yourTurn: false,

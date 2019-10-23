@@ -1,4 +1,5 @@
 .containerBoard {
+    position: absolute;
     background: white;
     align-self: center;
     align-items: center;
@@ -6,8 +7,8 @@
 }
 
 .containerBoard div {
-    height: 400px;
-    width: 400px;
+    height: 60vmin;
+    width: 60vmin;
     display: flex;
     flex-wrap: wrap;
 }
