@@ -1,5 +1,4 @@
 .myHelloBox {
-    width: 250px;
     height: 50%;
     display: flex;
     flex-flow: column nowrap;

@@ -3,7 +3,6 @@ import './css/OnlinePlayersTab.css';
 import { socket } from '../socket';
 
 export const OnlinePlayersTab = ({ user, users }) => {
-    
     const onClick = oppId => {
         console.log('Before sendInvitation');
         console.log(oppId);
@@ -24,6 +23,7 @@ export const OnlinePlayersTab = ({ user, users }) => {
             <div className='container'>
                 {Object.values(users)
                     .filter(one => one.id !== user.id)
+                    .sort((a, b) => b.mmr - a.mmr)
                     .map(eachUser => (
                         <ul key={eachUser.id}>
                             <li className='onlinePlayers'>{eachUser.name}</li>

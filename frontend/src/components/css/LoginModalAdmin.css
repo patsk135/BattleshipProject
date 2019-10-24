@@ -2,24 +2,29 @@
     position: absolute;
     text-align: center;
     align-content: center;
+    align-items: center;
     background: whitesmoke;
     box-shadow: 0rem 0.3rem 1.875rem rgba(256, 256, 256, 0.4);
     border-radius: 16px;
     height: 40vh;
     width: 40vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .adminLogin {
     height: 6vh;
     font-family: Nunito;
     font-size: 4vh;
+    margin-bottom: 2vh;
 }
 
 .usernamePassword {
     height: 4vh;
     font-family: Nunito;
     font-size: 2vh;
-    margin: 1vh;
 }
 
 .input {
@@ -27,5 +32,6 @@
     height: 4vh;
     background: rgba(196, 196, 196, 0.4);
     border-radius: 8px;
-    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-top: 0vh;
 }

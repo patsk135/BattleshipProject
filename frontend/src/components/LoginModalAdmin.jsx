@@ -29,18 +29,14 @@ export const LoginModalAdmin = ({ close }) => {
             <div className='loginModalAdmin'>
                 <div className='adminLogin'>Admin Login</div>
                 <div className='usernamePassword'>Username</div>
-                <div>
-                    <input className='input' type='text' value={name} onChange={handleInputName} />
-                </div>
+                <input className='input' type='text' value={name} onChange={handleInputName} />
                 <div className='usernamePassword'>Password</div>
-                <div>
-                    <input
-                        className='input'
-                        type='text'
-                        value={password}
-                        onChange={handleInputPassword}
-                    />
-                </div>
+                <input
+                    className='input'
+                    type='password'
+                    value={password}
+                    onChange={handleInputPassword}
+                />
                 <div>
                     <button className='btn' onClick={onClick}>
                         Login Admin

@@ -1,8 +1,8 @@
 .online-players-container {
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  flex: 1;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    flex: 1;
 }
 
 .nav {
@@ -11,15 +11,13 @@
     justify-content: space-around;
     align-items: center;
     background-color: blanchedalmond;
-    padding: 15px 32% 25px 8%;
-    margin-bottom: -2%;
+    padding: 2vh 30% 2vh 2%;
     list-style-type: none;
     text-align: center;
 }
 
 .nav p {
     color: black;
-    display: inline-block;
     font-family: Nunito;
     font-style: normal;
     font-weight: 300;
@@ -34,11 +32,15 @@
 .container ul {
     background-color: white;
     margin: 10px;
-    padding: 10px;
     font-size: 30px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+}
+
+.onlinePlayers {
+    width: 14%;
+    text-align: center;
 }
 
 .container ul li {
@@ -48,8 +50,8 @@
     font-family: Nunito;
     font-style: normal;
     font-weight: 300;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 3%;
+    flex-grow: 1;
 }
 
 .inviteButton {

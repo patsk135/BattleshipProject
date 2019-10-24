@@ -4,6 +4,8 @@
     left: 26rem;
     top: 25rem;
 
+    padding: 1vw;
+
     background: #ffffff;
     box-shadow: 0rem 0.3rem 1.875rem rgba(0, 0, 0, 0.1);
     border-radius: 16px;
@@ -39,7 +41,7 @@
 
 .small {
     font-size: 0.75em;
-    margin-top: 5vh;
+    margin-top: 4vh;
     margin-bottom: 0.5em;
 }
 .submit {
