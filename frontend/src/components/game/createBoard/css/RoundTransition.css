@@ -1,8 +1,8 @@
 .roundContainer {
     color: white;
     border-radius: 20px;
-    /* width: 562px;
-    height: 144px; */
+    width: 60vmin;
+    height: 15vh;
 
     align-self: center;
     align-items: center;
@@ -14,9 +14,10 @@
     font-family: Nunito;
     font-style: normal;
     font-weight: 300;
+    font-size: 96%;
     color: black;
 
-    margin-top: 3%;
+    margin-top: 2vh;
 }
 
 #nextRound {
@@ -29,8 +30,7 @@
     font-style: normal;
     font-weight: 300;
     color: white;
-    width: 300px;
-    height: 58;
+    width: 45%;
 
-    margin-top: 2%;
+    margin-top: 1vh;
 }

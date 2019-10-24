@@ -16,6 +16,6 @@ export const RoundTransition = ({ user, msg, openCreateBoard, closeTransition })
                     Next Round.
                 </button>
             </div>
-        </div>
+        </div> 
     );
 };
