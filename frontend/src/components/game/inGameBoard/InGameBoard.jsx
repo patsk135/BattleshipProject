@@ -61,10 +61,10 @@ export const InGameBoard = ({ name, boardStatus, hit, isOwner, setOppBoard, incr
             }
             setSquares(tmp);
         }
-        if (score === 4) {
+        if (score === 16) {
             setScore(0);
             // console.log('You win.');
-            setTimeout(() => socket.emit('winThisRound'), 1000);
+            setTimeout(() => socket.emit('winThisRound'), 800);
         }
     }, [boardStatus]);
 
