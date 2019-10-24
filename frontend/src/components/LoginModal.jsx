@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { socket } from '../socket';
 import './css/LoginModal.css';
-import Img from 'react-image';
-import { RadioGroup, Radio } from 'react-radio-group';
 
 export const LoginModal = ({ close }) => {
     const [name, setName] = useState('');
