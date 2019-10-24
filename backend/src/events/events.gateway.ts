@@ -24,6 +24,18 @@ export class EventsGateway {
 
   private logger: Logger = new Logger('EventsGateway');
 
+  @SubscribeMessage('adminLogin')
+  adminLogin(client: Socket, payload: any) {
+    this.logger.log('Event: AdminLogin');
+    console.log(payload);
+    const { username, password } = payload;
+    if (username === 'netcentric' && password === 'veryeazy') {
+      client.emit('loginSuccess');
+    } else {
+      client.emit('loginFail');
+    }
+  }
+
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
     client.emit('onConnection');
