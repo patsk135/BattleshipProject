@@ -24,6 +24,16 @@
     font-weight: 300;
     font-size: 16px;
     padding-left: 4%;
+    cursor: pointer;
+}
+
+.nav p:hover {
+  font-weight: bold;
+}
+
+.nav p:first-child:hover, .nav p:last-child:hover {
+  font-weight: normal;
+  cursor: auto;
 }
 
 .container {
