@@ -5,7 +5,7 @@ import { socket } from './socket';
 
 import { LoginModal } from './components/LoginModal';
 import { InviteWindow } from './components/InviteWindow';
-import { AdminPage } from './AdminPage';
+import { Admin } from './Admin';
 import { CreateBoard } from './components/game/createBoard/CreateBoard';
 import { InGameWindow } from './components/game/inGameBoard/InGameWindow';
 import { RoundTransition } from './components/game/createBoard/RoundTransition';
@@ -146,7 +146,7 @@ function App() {
                         <InGameWindow></InGameWindow>
                     </Route>
                     <Route path='/admin'>
-                        <AdminPage></AdminPage>
+                        <Admin></Admin>
                     </Route>
                     <Route path='/'>
                         <div className='App'>
