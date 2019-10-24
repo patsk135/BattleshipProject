@@ -2,9 +2,10 @@ import React from 'react';
 import './css/UserStatusBar.css';
 import { socket } from '../socket';
 
-export const UserStatusBar = ({ user }) => {
+export const UserStatusBar = ({ user, open }) => {
     const ready = () => {
         console.log('Ready');
+        open();
         socket.emit('playerReady');
     };
 

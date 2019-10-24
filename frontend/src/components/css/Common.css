@@ -27,3 +27,7 @@ button {
     font-size: 0.75em;
     color: #005377;
 }
+
+.avoid-clicks {
+    pointer-events: none;
+}

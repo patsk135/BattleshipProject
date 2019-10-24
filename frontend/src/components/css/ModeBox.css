@@ -1,12 +1,11 @@
 .ModeBox {
     position: absolute;
     top: 14.1%;
-    right: 5%;
+    right: 2%;
     font-family: Nunito;
-    color: black;
+    color: white;
     width: 20vh;
     padding: 1vh;
-    margin-bottom: 1vh;
     border-radius: 7%;
 }
 

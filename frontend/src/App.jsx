@@ -13,6 +13,7 @@ import { EndGameModal } from './components/EndGameModal';
 import { Lobby } from './components/Lobby';
 import { ShowGameMessage } from './components/ShowGameMessage';
 import { ModeBox } from './components/ModeBox';
+import { WaitingReadyWindow } from './components/WaitingReadyWindow';
 
 function App() {
     const [user, setUser] = useState({});
@@ -36,6 +37,10 @@ function App() {
 
     const [showInviteWindow, setShowInviteWindow] = useState(false);
     const closeInviteWindow = () => setShowInviteWindow(false);
+
+    const [showWaitingReadyWindow, setShowWatingReadyWindow] = useState(false);
+    const closeWaitingReadyWindow = () => setShowWatingReadyWindow(false);
+    const openWaitingReadyWindow = () => setShowWatingReadyWindow(true);
 
     const [showCreateBoard, setShowCreateBoard] = useState(false);
     const openCreateBoard = () => setShowCreateBoard(true);
@@ -121,6 +126,7 @@ function App() {
             console.log(`PreparationStage`);
             setGameMessage('Place 4 ships. Each ship = 4 consecutive boxes');
             setShowCreateBoard(true);
+            setShowWatingReadyWindow(false);
             setShowInviteWindow(false);
         });
 
@@ -165,7 +171,19 @@ function App() {
                     </Route>
                     <Route path='/'>
                         <div className='App'>
-                            <header className={`App-header ${mode}`}>
+                            <div>
+                                {showWaitingReadyWindow && (
+                                    <WaitingReadyWindow
+                                        close={closeWaitingReadyWindow}
+                                        user={user}
+                                        users={users}
+                                    />
+                                )}
+                            </div>
+                            <header
+                                className={`App-header ${mode} ${showWaitingReadyWindow &&
+                                    'avoid-clicks'}`}
+                            >
                                 {<ModeBox mode={mode} setMode={setMode} />}
                                 <div className='messageBox'>
                                     <ShowGameMessage gameMessage={gameMessage}></ShowGameMessage>
@@ -173,7 +191,12 @@ function App() {
                                 {showLogin ? (
                                     <LoginModal close={closeShowLogin} setMsg={setGameMessage} />
                                 ) : (
-                                    <Lobby user={user} users={users} messages={messages} />
+                                    <Lobby
+                                        user={user}
+                                        users={users}
+                                        messages={messages}
+                                        open={openWaitingReadyWindow}
+                                    />
                                 )}
                                 {showEndGameModal && (
                                     <EndGameModal

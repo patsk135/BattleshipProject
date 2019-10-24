@@ -1,0 +1,20 @@
+.waitingReadyWindow {
+    display: flex;
+    color: white;
+    font-size: 3vh;
+    position: absolute;
+    top: 35%;
+    right: 35%;
+    background-color: gray;
+    border-radius: 5%;
+    padding: 3%;
+}
+
+.waitingReadyWindow div {
+}
+
+.waitingReadyWindow div label {
+}
+
+.waitingReadyWindow div ul {
+}
