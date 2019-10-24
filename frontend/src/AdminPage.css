@@ -33,7 +33,7 @@
 
 .navPlayer {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
     background-color: gray;
     list-style-type: none;
     text-align: center;
@@ -58,7 +58,7 @@
 .cardPlayer ul {
     background-color: white;
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
     text-align: center;
     justify-content: space-evenly;
     margin-top: 0.5vh;

@@ -55,7 +55,6 @@ export const AdminPage = () => {
                     <li>Player ID</li>
                     <li>OPP ID</li>
                     <li>Status</li>
-                    <li>Ready</li>
                     <li>MMR</li>
                 </div>
                 <div className='cardPlayer'>
@@ -65,7 +64,6 @@ export const AdminPage = () => {
                             <li>{eachUser.id}</li>
                             <li>{eachUser.oppId}</li>
                             <li>{eachUser.status}</li>
-                            <li>{eachUser.ready}</li>
                             <li>{eachUser.mmr}</li>
                         </ul>
                     ))}

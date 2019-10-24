@@ -27,7 +27,7 @@ export const LoginModalAdmin = ({ close }) => {
     return (
         <div style={{ padding: '30vh 30vw' }}>
             <div className='loginModalAdmin'>
-                <div className='adminLogin'>Admin Login</div>
+                <div className='adminLogin'>Battleship Admin</div>
                 <div className='usernamePassword'>Username</div>
                 <input className='input' type='text' value={name} onChange={handleInputName} />
                 <div className='usernamePassword'>Password</div>
@@ -39,7 +39,7 @@ export const LoginModalAdmin = ({ close }) => {
                 />
                 <div>
                     <button className='btn' onClick={onClick}>
-                        Login Admin
+                        Login
                     </button>
                 </div>
             </div>

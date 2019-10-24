@@ -106,7 +106,7 @@ export class EventsGateway {
     this.logger.log('Event: AdminLogin');
     console.log(payload);
     const { username, password } = payload;
-    if (username === 'netcentric' && password === 'veryeazy') {
+    if (username === 'admin' && password === 'admin') {
       client.emit('loginSuccess');
     } else {
       client.emit('loginFail');
