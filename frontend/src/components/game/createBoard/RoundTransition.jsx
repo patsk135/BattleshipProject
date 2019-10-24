@@ -13,7 +13,7 @@ export const RoundTransition = ({ user, msg, openCreateBoard, closeTransition })
             </div>
             <div>
                 <button id='nextRound' onClick={onClickHandler}>
-                    Next Round.
+                    Next Round
                 </button>
             </div>
         </div> 

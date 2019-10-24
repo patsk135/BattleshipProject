@@ -1,9 +1,10 @@
 .roundContainer {
-    color: white;
+    background: white;
     border-radius: 20px;
-    width: 60vmin;
+    width: 50vmin;
     height: 15vh;
 
+    position: absolute;
     align-self: center;
     align-items: center;
     align-content: center;
