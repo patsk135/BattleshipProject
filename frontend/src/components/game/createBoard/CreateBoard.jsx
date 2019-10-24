@@ -6,12 +6,16 @@ export const CreateBoard = ({ setGameMessage }) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
     const [ship, setShip] = useState([]);
     const [numberOfShips, setNumberOfShips] = useState(0);
+
+    const [clickedReady, setClickedReady] = useState(false);
     // const [count, setCount] = useState(0);
 
     const ready = () => {
         // console.log('READY!');
+        setGameMessage('Waiting for opponent to place ships!');
         // console.log(user.oppId);
         socket.emit('createBoard', squares);
+        setClickedReady(true)
     };
 
     const handleOnClick = index => {
@@ -37,6 +41,7 @@ export const CreateBoard = ({ setGameMessage }) => {
     };
 
     const placeAShip = () => {
+        setClickedReady(false);
         if (ship.length !== 4) {
             setGameMessage('Ship size must be 4!');
             //console.log('Ship size must be 4!');
@@ -156,7 +161,7 @@ export const CreateBoard = ({ setGameMessage }) => {
                     </button>
                 )}
                 {numberOfShips === 4 && (
-                    <button id='ready' onClick={ready}>
+                    <button className={`ready ${clickedReady && 'wait'}`} onClick={ready}>
                         Ready
                     </button>
                 )}
