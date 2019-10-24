@@ -12,6 +12,7 @@ import { RoundTransition } from './components/game/createBoard/RoundTransition';
 import { EndGameModal } from './components/EndGameModal';
 import { Lobby } from './components/Lobby';
 import { ShowGameMessage } from './components/ShowGameMessage';
+import { ModeBox } from './components/ModeBox';
 
 function App() {
     const [user, setUser] = useState({});
@@ -19,6 +20,7 @@ function App() {
     const [messages, setMessages] = useState([]);
     const [tmp_msg, setTmp_msg] = useState('');
     const [timer, setTimer] = useState(0);
+    const [mode, setMode] = useState('mode1');
 
     const [gameMessage, setGameMessage] = useState('');
     const setMsgInterval = msg => {
@@ -163,7 +165,8 @@ function App() {
                     </Route>
                     <Route path='/'>
                         <div className='App'>
-                            <header className='App-header'>
+                            <header className={`App-header ${mode}`}>
+                                {<ModeBox mode={mode} setMode={setMode} />}
                                 <div className='messageBox'>
                                     <ShowGameMessage gameMessage={gameMessage}></ShowGameMessage>
                                 </div>

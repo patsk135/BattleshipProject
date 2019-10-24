@@ -1,0 +1,26 @@
+.ModeBox {
+    position: absolute;
+    top: 14.1%;
+    right: 5%;
+    font-family: Nunito;
+    color: black;
+    width: 20vh;
+    padding: 1vh;
+    margin-bottom: 1vh;
+    border-radius: 7%;
+}
+
+.ModeBox label {
+    font-size: 70%;
+}
+
+.ModeBox div {
+    padding: 0;
+    margin-left: 1.5vw;
+    text-align: left;
+}
+
+.ModeBox div ul {
+    font-size: 50%;
+    margin: 0.5vh;
+}
