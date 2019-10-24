@@ -17,14 +17,12 @@ export const InviteWindow = ({ close, user, users }) => {
 
     return (
         <div className='inviteWindow'>
-            <label>Invitation from {users[user.oppId] && users[user.oppId].name}</label>
             <div className='buttons'>
+                <label>Invitation from {users[user.oppId] && users[user.oppId].name}</label>
                 <li>
-                    <button onClick={accept} className='primaryButton acceptBt'>
+                    <button onClick={accept} className='primaryButton'>
                         Accept
                     </button>
-                </li>
-                <li>
                     <button onClick={reject} className='secondaryButton'>
                         Reject
                     </button>

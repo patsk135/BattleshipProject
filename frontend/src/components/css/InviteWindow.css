@@ -1,8 +1,9 @@
 .inviteWindow {
+    display: flex;
     position: absolute;
     width: 30%;
     height: 25%;
-    padding-top: 2%;
+    padding-top: 3%;
     /* align-self: center; */
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
@@ -11,8 +12,7 @@
 
 .inviteWindow label {
     padding-top: 3%;
-    padding-inline-start: 3%;
-    padding-inline-end: 3%;
+    padding-bottom: 5%;
     display: inline-block;
     font-family: Nunito;
     font-style: normal;
@@ -23,15 +23,13 @@
 
 .buttons {
     display: inline-block;
-    display: flex;
     padding-bottom: 3%;
     flex-direction: row;
     justify-content: center;
     align-content: center;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin: 10px;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    margin-left: 5vmin;
 }
 
 .buttons li {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { socket } from '../socket';
 import './css/LoginModal.css';
+import Img from 'react-image';
 
 export const LoginModal = ({ close }) => {
     const [name, setName] = useState('');
@@ -18,12 +19,50 @@ export const LoginModal = ({ close }) => {
             });
         }
     };
+
+    const avatars = [
+        '/profiles/1.jpeg',
+        '/profiles/2.jpeg',
+        '/profiles/3.jpeg',
+        '/profiles/4.jpeg',
+        '/profiles/5.jpeg',
+        '/profiles/6.jpeg',
+        '/profiles/7.jpeg',
+        '/profiles/8.jpeg',
+        '/profiles/9.jpeg',
+        '/profiles/10.jpeg',
+        '/profiles/11.jpeg',
+        '/profiles/12.jpeg',
+        '/profiles/13.jpeg',
+        '/profiles/14.jpeg',
+        '/profiles/15.jpeg',
+    ];
+
     return (
         <div className='loginModal'>
             <p className='enterYn'>Enter Your Name </p>
             <label>
                 <input type='text' value={name} onChange={handleInput} className='input' />
             </label>
+            <div>
+                <form className='avt'>
+                    <label className='enterYn small'>Choose your avatar</label>
+                    <div>
+                        {avatars.map(image => {
+                            return (
+                                <ul>
+                                    <input
+                                        type='radio'
+                                        value='i'
+                                        // checked={this.state.selectedOption === 'i'}
+                                    />
+                                    <img src={image} alt=''></img>
+                                </ul>
+                            );
+                        })}
+                    </div>
+                </form>
+            </div>
             <div>
                 <button onClick={onClick} className='primaryButton submit'>
                     Submit
