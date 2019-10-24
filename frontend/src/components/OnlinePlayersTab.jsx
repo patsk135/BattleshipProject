@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/OnlinePlayersTab.css';
+import './css/UserStatusBar.css';
 import { socket } from '../socket';
 
 export const OnlinePlayersTab = ({ user, users }) => {
@@ -12,6 +13,7 @@ export const OnlinePlayersTab = ({ user, users }) => {
     return (
         <div className='online-players-container'>
             <ul className='nav'>
+                <p>AVATAR</p>
                 <p>
                     ONLINE
                     <br />
@@ -19,6 +21,11 @@ export const OnlinePlayersTab = ({ user, users }) => {
                 </p>
                 <p>STATUS</p>
                 <p>MMR</p>
+                <p>
+                    INVITE
+                    <br />
+                    BUTTON
+                </p>
             </ul>
             <div className='container'>
                 {Object.values(users)
@@ -26,6 +33,11 @@ export const OnlinePlayersTab = ({ user, users }) => {
                     .sort((a, b) => b.mmr - a.mmr)
                     .map(eachUser => (
                         <ul key={eachUser.id}>
+                            <li>
+                                <div className='avatar'>
+                                    <img src={eachUser.avatar} alt=''></img>
+                                </div>
+                            </li>
                             <li className='onlinePlayers'>{eachUser.name}</li>
                             <li>{eachUser.status}</li>
                             <li>{eachUser.mmr}</li>

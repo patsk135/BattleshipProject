@@ -11,13 +11,13 @@
     justify-content: space-around;
     align-items: center;
     background-color: blanchedalmond;
-    padding: 2vh 30% 2vh 2%;
+    padding: 2vh 6.5% 2vh 0%;
     list-style-type: none;
     text-align: center;
 }
 
 .nav p {
-    width: 25%;
+    width: 20%;
     color: black;
     font-family: Nunito;
     font-style: normal;
