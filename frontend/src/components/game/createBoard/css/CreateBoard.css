@@ -13,7 +13,6 @@
     width: 50vh;
     display: flex;
     flex-wrap: wrap;
-
 }
 
 #placeShip {
@@ -44,6 +43,6 @@
     color: rgba(0, 83, 119, 0.9);
     width: 12vw;
     height: 6vh;
-
+    
     margin-top: 1vh;
 }
