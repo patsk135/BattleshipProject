@@ -17,11 +17,13 @@
 }
 
 .nav p {
+    width: 25%;
     color: black;
     font-family: Nunito;
     font-style: normal;
     font-weight: 300;
     font-size: 16px;
+    padding-left: 4%;
 }
 
 .container {
@@ -44,14 +46,16 @@
 }
 
 .container ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: black;
-    display: inline-block;
     font-size: 20px;
     font-family: Nunito;
     font-style: normal;
     font-weight: 300;
     padding-right: 3%;
-    flex-grow: 1;
+    width: 25%;
 }
 
 .inviteButton {
