@@ -20,12 +20,13 @@ export const AdminPage = () => {
         socket.on('onConnection', () => {
             socket.emit('fetchUsers');
             socket.emit('fetchRooms');
+            socket.emit('addAdmin');
         });
         socket.on('refreshOnlineUsers', payload => {
             setUsers(payload.users);
         });
         socket.on('refreshRooms', payload => {
-            console.log('inh fetch room');
+            console.log('in fetch room');
             console.log(payload);
             setRooms(payload.rooms);
         });

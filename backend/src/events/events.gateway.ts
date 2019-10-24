@@ -10,7 +10,7 @@ import { Logger } from '@nestjs/common';
 import { MsgToServer, Room } from '../interfaces/common.interface';
 import { Status, User } from '../interfaces/users.interface';
 
-import { ROOMS, admin } from '../mocks/rooms.mocks';
+import { ROOMS, admin, readyPlayer } from '../mocks/rooms.mocks';
 
 @WebSocketGateway()
 export class EventsGateway {
@@ -178,6 +178,12 @@ export class EventsGateway {
         client.broadcast.to(id).emit('refreshRooms', adminPayload);
       }
     });
+
+    const payload = {
+      event: this.createUser.name,
+      users: this.usersService.users,
+    };
+    this.server.emit('refreshOnlineUsers', payload);
   }
 
   @SubscribeMessage('createUser')
@@ -239,11 +245,13 @@ export class EventsGateway {
   @SubscribeMessage('deleteUser')
   async deleteUser(client: Socket, userId: string) {
     this.logger.log(`Event: DeleteUser`);
+    delete this.boardsService.boards[userId];
     const payload = {
       event: this.deleteUser.name,
       users: await this.usersService.deleteUser(userId),
     };
     this.server.emit('refreshOnlineUsers', payload);
+    client.emit('onConnection');
   }
 
   @SubscribeMessage('pingToServer')
@@ -256,10 +264,6 @@ export class EventsGateway {
     client.emit('emit', payload);
   }
 
-  // @SubscribeMessage('retrieveTime')
-  // emitTime(client: Socket, data: any) {
-  //   client.emit('emitTime');
-  // }
   /////////////////////////////////////////////////////////////////
 
   RUU = 'returnUpdatedUser';
@@ -271,11 +275,87 @@ export class EventsGateway {
       name: this.usersService.users[client.id].name,
       text,
     };
-    // this.logger.log(message);
     this.server.emit('msgToClients', {
       event: 'MsgToServer',
       message,
     });
+  }
+
+  @SubscribeMessage('playerReady')
+  async playerReady(client: Socket, data: any) {
+    this.logger.log(`Event: PlayerReady`);
+    if (readyPlayer.id === '') {
+      readyPlayer.id = client.id;
+      const player = this.usersService.users[client.id];
+      const updatedPlayer = {
+        ...player,
+        status: Status.READY,
+      };
+      const returnedPlayer = await this.usersService.updateUser(updatedPlayer);
+
+      const payload = {
+        event: 'PlayerReady',
+        user: returnedPlayer[client.id],
+      };
+      client.emit('returnUpdatedUser', payload);
+    } else {
+      const player1 = this.usersService.users[client.id];
+      const player2 = this.usersService.users[readyPlayer.id];
+      readyPlayer.id = '';
+
+      const updatedPlayer1 = {
+        ...player1,
+        status: Status.INGAME,
+        oppId: player2.id,
+      };
+      this.usersService.updateUser(updatedPlayer1);
+
+      const updatedPlayer2 = {
+        ...player2,
+        status: Status.INGAME,
+        oppId: client.id,
+      };
+      this.usersService.updateUser(updatedPlayer2);
+
+      const payload1 = {
+        event: 'PlayerReady',
+        user: this.usersService.users[player1.id],
+      };
+      client.emit('returnUpdatedUser', payload1);
+
+      const payload2 = {
+        event: 'PlayerReady',
+        user: this.usersService.users[player2.id],
+      };
+      client.broadcast.to(player2.id).emit('returnUpdatedUser', payload2);
+
+      client.emit('preparationStage', {
+        event: 'PlayerReady',
+      });
+      client.broadcast.to(player2.id).emit('preparationStage', {
+        event: 'PlayerReady',
+      });
+
+      const room: Room = {
+        player1: player1.id,
+        player2: player2.id,
+      };
+      ROOMS.push(room);
+
+      const adminPayload = {
+        event: 'PlayerReady',
+        rooms: ROOMS,
+      };
+      admin.map(id => {
+        client.broadcast.to(id).emit('refreshRooms', adminPayload);
+      });
+    }
+
+    const payload = {
+      event: 'PlayerReady',
+      users: this.usersService.users,
+    };
+    this.server.emit('refreshOnlineUsers', payload);
   }
 
   @SubscribeMessage('sendInvitation')
@@ -505,7 +585,11 @@ export class EventsGateway {
         event: 'HandleDisconnect',
         rooms: ROOMS,
       };
+      // console.log(admin);
       admin.map(id => {
+        console.log('in mapping refreshroom');
+        // console.log(id);
+        // console.log(ROOMS);
         client.broadcast.to(id).emit('refreshRooms', adminPayload);
       });
       // console.log('After');

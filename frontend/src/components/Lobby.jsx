@@ -19,7 +19,7 @@ const OnlineLobby = ({ user, users, messages }) => {
 export const Lobby = ({ user, users, messages }) => {
     return (
         <div className='lobby-container'>
-            {user.status === 'ONLINE' ? (
+            {user.status !== 'INGAME' ? (
                 <OnlineLobby user={user} users={users} messages={messages} />
             ) : null}
         </div>
