@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { socket } from '../../../socket';
 import './css/CreateBoard.css';
 
-export const CreateBoard = ({setGameMessage}) => {
+export const CreateBoard = ({ setGameMessage }) => {
     const [squares, setSquares] = useState(new Array(64).fill(0));
     const [ship, setShip] = useState([]);
     const [numberOfShips, setNumberOfShips] = useState(0);
@@ -16,7 +16,7 @@ export const CreateBoard = ({setGameMessage}) => {
 
     const handleOnClick = index => {
         if (numberOfShips === 4) {
-            setGameMessage('You already have 4 ships!');
+            setGameMessage('You already have 4 ships! Please click Ready!');
             //console.log('You already have 4 ships!');
             return;
         }
@@ -24,7 +24,7 @@ export const CreateBoard = ({setGameMessage}) => {
             setGameMessage('Ship size must be 4!');
             //console.log('Ship size must be 4!');
         } else if (squares[index] === 1) {
-            console.log('Already placed!');
+            setGameMessage('This slot already has a ship.');
         } else {
             // setCount(count + 1);
             setShip(prev => [...prev, index]);
@@ -96,16 +96,17 @@ export const CreateBoard = ({setGameMessage}) => {
         }
         // console.log(check);
         if (check && numberOfShips < 4) {
-            setNumberOfShips(numberOfShips + 1);
+            setNumberOfShips(prev => {
+                setGameMessage(
+                    `You have placed ${prev + 1} ship(s). Place ${3 - prev} ship(s) more.`,
+                );
+                return prev + 1;
+            });
         } else {
-            if (numberOfShips === 4) {
+            if (check) {
                 setGameMessage('You already have 4 ships! Please click Ready!');
-                //console.log('You already have 4 ships!');
-                //console.log('Please Click Ready!');
             } else {
-                setGameMessage('Ship must be 4 consecutive blocks');
-                //console.log('Ship must be 4 consecutive blocks');
-                // console.log(ship);
+                setGameMessage('Ship must be 4 consecutive blocks.');
             }
             const newBoard = squares.map(x => x);
             for (let i = 0; i < 4; i++) {
@@ -150,15 +151,15 @@ export const CreateBoard = ({setGameMessage}) => {
             <div className='containerBoard'>
                 <div>{renderSquare()}</div>
                 {numberOfShips !== 4 && (
-                <button id='placeShip' onClick={placeAShip}>
-                    Place Ship
-                </button>
-            )}
-            {numberOfShips >= 1 && (
-                <button id='ready' onClick={ready}>
-                    Ready
-                </button>
-            )}
+                    <button id='placeShip' onClick={placeAShip}>
+                        Place a Ship
+                    </button>
+                )}
+                {numberOfShips === 4 && (
+                    <button id='ready' onClick={ready}>
+                        Ready
+                    </button>
+                )}
             </div>
         </>
     );

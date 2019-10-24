@@ -24,6 +24,7 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+    padding-top: 2%;
 }
 
 .App-link {
@@ -40,7 +41,7 @@
     display: inline-flex;
 }
 
-.messageBox{
+.messageBox {
     background: #49ba9c;
     /* margin-top: 3%; */
     width: 56vw;

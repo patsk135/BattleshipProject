@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { socket } from '../socket';
 import './css/LoginModal.css';
 
-export const LoginModal = ({ close }) => {
+export const LoginModal = ({ close, setMsg }) => {
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState('/profiles/1.jpeg');
 
@@ -23,8 +23,10 @@ export const LoginModal = ({ close }) => {
             };
             socket.emit('createUser', payload, err => {
                 if (err) {
+                    setMsg(`Error: ${err.message}`);
                     console.log(err);
                 } else {
+                    setMsg(`Welcome ${name}. Let's play Battleship.`);
                     close();
                 }
             });
@@ -61,7 +63,7 @@ export const LoginModal = ({ close }) => {
                     <div>
                         {avatars.map((image, index) => {
                             return (
-                                <ul>
+                                <ul key={index}>
                                     <input
                                         type='radio'
                                         name='avatar'

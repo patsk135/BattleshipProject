@@ -411,7 +411,7 @@ export class EventsGateway {
     this.logger.log(`Event: AcceptInvitation`);
     const user = this.usersService.users[client.id];
     const opp = this.usersService.users[oppId];
-    if (opp.status === Status.ONLINE) {
+    if (opp !== undefined && opp.status === Status.ONLINE) {
       // console.log('Before');
       // console.log(ROOMS);
       const room: Room = {
@@ -563,7 +563,7 @@ export class EventsGateway {
     const user = this.usersService.users[client.id];
     const opp = this.usersService.users[user.oppId];
     user.score = user.score + 1;
-    if (user.score === 1) {
+    if (user.score === 2) {
       const mmrDiff = Math.abs(user.score - opp.score);
 
       const updatedUser = {
