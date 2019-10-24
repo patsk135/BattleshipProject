@@ -60,6 +60,7 @@ function App() {
             closeTransition();
             closeShowEndGameModal();
             openShowLogin();
+            setMessages([]);
             // socket.emit('fetchUser');
             socket.emit('fetchUsers');
         });

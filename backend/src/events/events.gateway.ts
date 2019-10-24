@@ -24,18 +24,6 @@ export class EventsGateway {
 
   private logger: Logger = new Logger('EventsGateway');
 
-  @SubscribeMessage('adminLogin')
-  adminLogin(client: Socket, payload: any) {
-    this.logger.log('Event: AdminLogin');
-    console.log(payload);
-    const { username, password } = payload;
-    if (username === 'netcentric' && password === 'veryeazy') {
-      client.emit('loginSuccess');
-    } else {
-      client.emit('loginFail');
-    }
-  }
-
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
     client.emit('onConnection');
@@ -111,6 +99,18 @@ export class EventsGateway {
   @SubscribeMessage('addAdmin')
   async addAdmin(client: Socket, data: any) {
     admin.push(client.id);
+  }
+
+  @SubscribeMessage('adminLogin')
+  adminLogin(client: Socket, payload: any) {
+    this.logger.log('Event: AdminLogin');
+    console.log(payload);
+    const { username, password } = payload;
+    if (username === 'netcentric' && password === 'veryeazy') {
+      client.emit('loginSuccess');
+    } else {
+      client.emit('loginFail');
+    }
   }
 
   @SubscribeMessage('fetchUsers')
@@ -200,7 +200,7 @@ export class EventsGateway {
 
   @SubscribeMessage('createUser')
   async createUser(client: Socket, payload: any) {
-    const {name, avatar} = payload
+    const { name, avatar } = payload;
     this.logger.log(`Event: CreateUser => Name: ${name} Avata: ${avatar}`);
     const user: User = {
       id: client.id,
@@ -304,6 +304,20 @@ export class EventsGateway {
       const updatedPlayer = {
         ...player,
         status: Status.READY,
+      };
+      const returnedPlayer = await this.usersService.updateUser(updatedPlayer);
+
+      const payload = {
+        event: 'PlayerReady',
+        user: returnedPlayer[client.id],
+      };
+      client.emit('returnUpdatedUser', payload);
+    } else if (readyPlayer.id === client.id) {
+      readyPlayer.id = '';
+      const player = this.usersService.users[client.id];
+      const updatedPlayer = {
+        ...player,
+        status: Status.ONLINE,
       };
       const returnedPlayer = await this.usersService.updateUser(updatedPlayer);
 
@@ -587,9 +601,7 @@ export class EventsGateway {
       // console.log(ROOMS);
 
       const index = ROOMS.findIndex(
-        room =>
-          room.player1 === client.id ||
-          room.player1 === this.usersService.users[client.id].oppId
+        room => room.player1 === user.id || room.player1 === opp.id
       );
       if (index !== -1) {
         ROOMS.splice(index, 1);
@@ -602,8 +614,8 @@ export class EventsGateway {
       // console.log(admin);
       admin.map(id => {
         console.log('in mapping refreshroom');
-        // console.log(id);
-        // console.log(ROOMS);
+        console.log(id);
+        console.log(ROOMS);
         client.broadcast.to(id).emit('refreshRooms', adminPayload);
       });
       // console.log('After');
