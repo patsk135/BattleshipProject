@@ -1,7 +1,7 @@
 .loginModal {
     width: 25em;
     height: 22em;
-    left: 26.5rem;
+    left: 26rem;
     top: 25rem;
 
     background: #ffffff;
@@ -10,6 +10,7 @@
 }
 
 .avt div {
+    margin-left: 1rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

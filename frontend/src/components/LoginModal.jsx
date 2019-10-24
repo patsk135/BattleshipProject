@@ -2,15 +2,28 @@ import React, { useState } from 'react';
 import { socket } from '../socket';
 import './css/LoginModal.css';
 import Img from 'react-image';
+import { RadioGroup, Radio } from 'react-radio-group';
 
 export const LoginModal = ({ close }) => {
     const [name, setName] = useState('');
+    const [avatar, setAvatar] = useState('/profiles/1.jpeg');
+
     const handleInput = event => {
         setName(event.target.value);
     };
+
+    const handleOnSelect = event => {
+        console.log('in OnSelect');
+        setAvatar(event.target.value);
+    };
+
     const onClick = () => {
         if (name !== '') {
-            socket.emit('createUser', name, err => {
+            const payload = {
+                name,
+                avatar,
+            };
+            socket.emit('createUser', payload, err => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -42,19 +55,21 @@ export const LoginModal = ({ close }) => {
         <div className='loginModal'>
             <p className='enterYn'>Enter Your Name </p>
             <label>
-                <input type='text' value={name} onChange={handleInput} className='input' />
+                <input type='text' onChange={handleInput} className='input' />
             </label>
             <div>
                 <form className='avt'>
                     <label className='enterYn small'>Choose your avatar</label>
                     <div>
-                        {avatars.map(image => {
+                        {avatars.map((image, index) => {
                             return (
                                 <ul>
                                     <input
                                         type='radio'
-                                        value='i'
-                                        // checked={this.state.selectedOption === 'i'}
+                                        name='avatar'
+                                        value={image}
+                                        checked={avatar === image}
+                                        onChange={handleOnSelect}
                                     />
                                     <img src={image} alt=''></img>
                                 </ul>
@@ -64,7 +79,7 @@ export const LoginModal = ({ close }) => {
                 </form>
             </div>
             <div>
-                <button onClick={onClick} className='primaryButton submit'>
+                <button onClick={e => onClick()} className='primaryButton submit'>
                     Submit
                 </button>
             </div>

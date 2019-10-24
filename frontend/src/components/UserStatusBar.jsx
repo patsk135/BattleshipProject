@@ -17,7 +17,7 @@ export const UserStatusBar = ({ user }) => {
         <div className='myHelloBox'>
             <div className='profile-container'>
                 <div className='avatar'>
-                    <img src='/profiles/2.jpeg' alt='' />
+                    <img src={user.avatar} alt='' />
                 </div>
                 <p className='hello'>Hello, {user.name}</p>
                 <p className='MMR'>MMR: {user.mmr}</p>

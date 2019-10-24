@@ -1,6 +1,7 @@
 export interface User {
   id: string;
   name: string;
+  avatar: string;
   status: Status;
   oppId: string;
   mmr: number;

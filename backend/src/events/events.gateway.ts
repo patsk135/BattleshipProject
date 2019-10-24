@@ -187,11 +187,13 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('createUser')
-  async createUser(client: Socket, name: string) {
-    this.logger.log(`Event: CreateUser => Name: ${name}`);
+  async createUser(client: Socket, payload: any) {
+    const {name, avatar} = payload
+    this.logger.log(`Event: CreateUser => Name: ${name} Avata: ${avatar}`);
     const user: User = {
       id: client.id,
       name,
+      avatar,
       oppId: '',
       status: Status.ONLINE,
       mmr: 0,
