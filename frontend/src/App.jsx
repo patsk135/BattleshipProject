@@ -150,11 +150,9 @@ function App() {
             closeInGameWindow();
             // setShowEndGameModal(true);
             if (msg === 'oppDisconnect') {
-                setGameMessage(
-                    `Your opponent disconnect. Your MMR +1. Now your MMR is ${user.mmr}.`,
-                );
+                setGameMessage(`Your opponent disconnect. Your MMR +1.`);
             } else {
-                setGameMessage(`You ${msg} this game. Now your MMR is ${user.mmr}`);
+                setGameMessage(`You ${msg} this game.`);
             }
         });
     }, []);
