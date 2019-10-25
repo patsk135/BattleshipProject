@@ -5,7 +5,7 @@
 - Anapat Jiamwijitkul 6031878521
 - Panas Rattanasuwan 6031792121
 - Prin Siripattanakul 6031788721
-- Puvit Prajaktham 6031788721
+- Puvit Prajaktham 6031830321
 
 ## Install dependencies
 
@@ -33,7 +33,7 @@ cd backend
 npm run start
 ```
 
-3. Client-side will host in <a href="localhost:8080" target="_blank">localhost:8080/</a>
+3. Client-side will host in <a href="localhost:8080" target="_blank">localhost:8080/</a> <br> Server-side will host in <a href="localhost:3000" target="_blank">localhost:3000/</a>
 
 ## Steps to build App
 

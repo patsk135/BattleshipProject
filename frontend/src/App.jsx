@@ -24,12 +24,12 @@ function App() {
     const [mode, setMode] = useState('mode1');
 
     const [gameMessage, setGameMessage] = useState('');
-    const setMsgInterval = msg => {
-        setGameMessage(msg);
-        setTimeout(() => {
-            setGameMessage('');
-        }, 8000);
-    };
+    // const setMsgInterval = msg => {
+    //     setGameMessage(msg);
+    //     setTimeout(() => {
+    //         setGameMessage('');
+    //     }, 8000);
+    // };
 
     const [showLogin, setShowLogin] = useState(true);
     const closeShowLogin = () => setShowLogin(false);
@@ -83,14 +83,14 @@ function App() {
 
         socket.on('returnUpdatedUser', payload => {
             console.log('ReturnUpdatedUser: ');
-            console.log(payload);
+            // console.log(payload);
             setUser(payload.user);
         });
 
         socket.on('refreshOnlineUsers', payload => {
             console.log('RefreshOnlineUsers: ');
             // console.log(payload);
-            console.log(payload);
+            // console.log(payload);
             // console.log(users);
             setUsers(payload.users);
         });

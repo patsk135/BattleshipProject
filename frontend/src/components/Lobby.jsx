@@ -16,7 +16,7 @@ const OnlineLobby = ({ user, users, messages, open }) => {
     );
 };
 
-export const Lobby = ({ user, users, messages, open = { open } }) => {
+export const Lobby = ({ user, users, messages, open }) => {
     return (
         <div className='lobby-container'>
             {user.status !== 'INGAME' ? (

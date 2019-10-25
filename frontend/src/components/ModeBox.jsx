@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './css/ModeBox.css';
 
 export const ModeBox = ({ mode, setMode }) => {
